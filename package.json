@@ -1,0 +1,15 @@
+{
+  "name": "smart-fellas-modding",
+  "private": true,
+  "description": "The scripting API for Smart Fellas maps and game modes: types, examples and the wiki's checks.",
+  "license": "MIT",
+  "type": "module",
+  "types": "smart-fellas.d.ts",
+  "scripts": {
+    "check": "node tools/check.mjs",
+    "reference": "node tools/reference.mjs"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3"
+  }
+}
