@@ -21,7 +21,7 @@ An event is the game telling your script that something happened. You give it a 
 | `game.onDash` | an octopus dashes | the player |
 | `game.onInk` | an octopus squirts ink | the player |
 | `game.onGrab` | an octopus grabs at something | the player |
-| `game.onShoot` | a diver fires a gun | the player |
+| `game.onShoot` | a diver fires either gun | the player |
 | `zone.onEnter`, `zone.onLeave` | a player swims into or out of a zone | the player |
 | `zone.onSpearEnter`, `zone.onSpearLeave` | a spear flies into or out of a zone | who threw it (or `null`) |
 | `piece.onUse` | a player uses a switch | the player |
@@ -30,7 +30,8 @@ A `client/` script on a player's PC hears the match start, players join and leav
 end, players it can see go in and out of zones, and its own player using a switch. Meals, catches,
 kills, spears, dashes, ink, grabs and shots are heard on the host only.
 
-`onDash`, `onInk`, `onGrab` and `onShoot` are new in API 1.1.0.
+`onDash`, `onInk`, `onGrab` and `onShoot` are new in API 1.1.0. `onDash`, `onInk` and `onGrab` are
+for octopuses only: the ability keys of a team a mode added are heard with `onAbility`, as before.
 
 ## Example: a feast announcer
 

@@ -203,7 +203,7 @@ type SettingValue = number | string | boolean;
  */
 type Viewers = Team | Player;
 
-/** One HUD widget (game.widget), drawn in a column on the right of the screen. */
+/** One HUD widget (game.widget), drawn in a column on the left of the screen, under the banner. */
 interface WidgetSpec {
   /** "text": a line of text; "bar": a filling bar; "counter": a number; "timer": a countdown. */
   kind: "text" | "bar" | "counter" | "timer";
@@ -316,19 +316,25 @@ interface Player {
    */
   setLine(text: string): void;
 
-  /** Their speed as a share of normal: 1 is normal, 0 held still; null once gone (on the host only). */
+  /**
+   * Their speed as a share of normal: 1 is normal, 0 held still; null once gone. On the host it is
+   * what scripts set; on a player's PC it is what that PC was sent for them (1 if nothing).
+   */
   readonly speed: number | null;
   /**
    * Sets their speed as a share of normal, 0 to 3: 0 holds them still (they can still look round and
-   * use abilities), 1 is normal, 3 is three times as fast. It stays until changed, the round ends, or
-   * they leave (on the host only).
+   * use abilities), 1 is normal, 3 is three times as fast. It works for octopuses and divers: it
+   * scales swimming and crawling, while dashes keep their own pace. A creature a player drives (a
+   * shark on a mode's team) keeps its own speed. It stays until changed, and goes back to normal
+   * when a round starts and when the lobby comes back (on the host only).
    */
   setSpeed(share: number): void;
   /** Plays one of the game's sounds for them alone, wherever they are (on the host only). */
   playSound(sound: SoundName): void;
   /**
    * Shows them alone big text in the middle of the screen, as game.announce does for more players:
-   * 1 to 60 characters, for 0.5 to 15 seconds (3 if left out) (on the host only).
+   * 1 to 60 characters, for 0.5 to 15 seconds (3 if left out). It counts as a message from the map,
+   * with the same limits as game.say (on the host only).
    */
   announce(text: string, seconds?: number): void;
 }
@@ -574,16 +580,20 @@ interface Game {
 
   /**
    * Shows big text in the middle of the screen: 1 to 60 characters, for `seconds` (0.5 to 15, 3 if
-   * left out). A new one replaces the one showing. At most 2 a second for any one player; more are
-   * dropped. `viewers` is one team or one player; leave it out for everyone (on the host only).
+   * left out). A new one replaces the one showing. It counts as a message from the map, towards the
+   * same limits as game.say: at most 3 a tick and 6 a second for any one player, and a call that
+   * would go over throws. `viewers` is one team or one player; leave it out for everyone (on the
+   * host only).
    */
   announce(text: string, seconds?: number, viewers?: Viewers): void;
   /**
-   * Shows a HUD widget, or changes the one with this id: `id` is 1 to 16 letters, digits, - or _.
-   * At most 8 widgets on any player's screen. They stay until removed, or until the lobby comes
-   * back. A call that changes nothing sends nothing, so it is fine to call it every tick. A "timer"
-   * counts down by itself: set it once. `viewers` is one team or one player; leave it out for
-   * everyone (on the host only).
+   * Shows a HUD widget in the column on the left of the screen, under the banner, or changes the
+   * one with this id: `id` is 1 to 16 letters, digits, - or _. At most 8 widgets show on any
+   * player's screen: a 9th isn't shown on that screen (no error), and changing or removing those
+   * already there always works. They stay until removed, or until the lobby comes back. A call that
+   * changes nothing sends nothing, so it is fine to call it every tick. A "timer" counts down by
+   * itself: asking for it again with the same seconds doesn't restart it; new seconds do.
+   * `viewers` is one team or one player; leave it out for everyone (on the host only).
    */
   widget(id: string, spec: WidgetSpec, viewers?: Viewers): void;
   /**
@@ -593,8 +603,9 @@ interface Game {
   removeWidget(id: string, viewers?: Viewers): void;
   /**
    * Shows a marker in the world, or moves or changes the one with this id (ids as for widget). At
-   * most 16 on any player's screen. `viewers` is one team or one player; leave it out for everyone
-   * (on the host only).
+   * most 16 show on any player's screen: a 17th isn't shown on that screen (no error), and changing
+   * or removing those already there always works. `viewers` is one team or one player; leave it out
+   * for everyone (on the host only).
    */
   marker(id: string, spec: MarkerSpec, viewers?: Viewers): void;
   /**
@@ -641,13 +652,16 @@ interface Game {
   onAbility(handler: (player: Player, ability: string, target: Player) => void): void;
   /** Calls `handler` when an ability's lunge reaches who it was aimed at. */
   onAbilityLand(handler: (player: Player, ability: string, target: Player) => void): void;
-  /** Calls `handler` when an octopus dashes. Heard on the host only. */
+  /**
+   * Calls `handler` when an octopus dashes. Heard on the host only. onDash, onInk and onGrab are
+   * for octopuses only: a mode's own team's ability keys are heard with onAbility.
+   */
   onDash(handler: (player: Player) => void): void;
   /** Calls `handler` when an octopus squirts ink. Heard on the host only. */
   onInk(handler: (player: Player) => void): void;
   /** Calls `handler` when an octopus grabs at something. Heard on the host only. */
   onGrab(handler: (player: Player) => void): void;
-  /** Calls `handler` when a diver fires a gun. Heard on the host only. */
+  /** Calls `handler` when a diver fires either gun. Heard on the host only. */
   onShoot(handler: (player: Player) => void): void;
 }
 
@@ -760,9 +774,9 @@ declare const Ease: {
 };
 
 /**
- * Calls `step` every tick for `seconds`, with how far along it is: 0 to 1, eased (Ease.linear if
- * left out). The last call is always with 1, then `done` is called. Gives back a timer: cancel() it
- * to stop it early.
+ * Calls `step` every tick for `seconds` (0 to 86400; anything else throws), with how far along it
+ * is: 0 to 1, eased (Ease.linear if left out). The last call is always with 1, then `done` is
+ * called. Gives back a timer: cancel() it to stop it early.
  */
 declare function tween(
   seconds: number,
@@ -781,8 +795,8 @@ interface State {
 }
 
 /**
- * A set of named states, in one at a time, ticked every tick by itself. It goes into `start` at
- * once. If a state calls go() on its own machine, give the machine's type by hand:
+ * A set of named states, in one at a time, ticked every tick by itself, whatever the match's phase
+ * (in the lobby too). It goes into `start` at once. If a state calls go() on its own machine, give the machine's type by hand:
  * `const phases: StateMachine<"wait" | "play"> = new StateMachine({ ... }, "wait");`.
  */
 declare class StateMachine<S extends string = string> {
@@ -800,7 +814,8 @@ declare class StateMachine<S extends string = string> {
 
 /**
  * A store of values by name, for this round: it is emptied as each round starts, before your
- * onRoundStart runs.
+ * onRoundStart runs. Each set of scripts has its own: the map's and the mode's don't share one, and
+ * each PC's scripts have their own.
  */
 declare const store: {
   /** The value kept under `key`, or `fallback` if there is none. */
@@ -820,8 +835,10 @@ declare const store: {
 };
 
 /**
- * Writes a line to the game's log on the PC the script runs on (the host's, for scripts on the
- * host): the values joined by spaces, objects as JSON. At most 20 lines a second; more are dropped.
- * Each line is cut at 200 characters.
+ * Writes a line to the game's log on the PC the script runs on: the host's for scripts on the host,
+ * that player's own for client/ scripts. The log is the console, and the log file in the logs folder
+ * beside the game's settings. Each line starts "map script:" or "mode script:", then the values
+ * joined by spaces, objects as JSON. At most 20 lines a second; more are dropped. Each line is cut
+ * at 200 characters.
  */
 declare function log(...values: unknown[]): void;

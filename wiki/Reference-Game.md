@@ -406,8 +406,10 @@ announce(text: string, seconds?: number, viewers?: Viewers): void;
 ```
 
 Shows big text in the middle of the screen: 1 to 60 characters, for `seconds` (0.5 to 15, 3 if
-left out). A new one replaces the one showing. At most 2 a second for any one player; more are
-dropped. `viewers` is one team or one player; leave it out for everyone (on the host only).
+left out). A new one replaces the one showing. It counts as a message from the map, towards the
+same limits as game.say: at most 3 a tick and 6 a second for any one player, and a call that
+would go over throws. `viewers` is one team or one player; leave it out for everyone (on the
+host only).
 
 ### widget
 
@@ -415,11 +417,13 @@ dropped. `viewers` is one team or one player; leave it out for everyone (on the 
 widget(id: string, spec: WidgetSpec, viewers?: Viewers): void;
 ```
 
-Shows a HUD widget, or changes the one with this id: `id` is 1 to 16 letters, digits, - or _.
-At most 8 widgets on any player's screen. They stay until removed, or until the lobby comes
-back. A call that changes nothing sends nothing, so it is fine to call it every tick. A "timer"
-counts down by itself: set it once. `viewers` is one team or one player; leave it out for
-everyone (on the host only).
+Shows a HUD widget in the column on the left of the screen, under the banner, or changes the
+one with this id: `id` is 1 to 16 letters, digits, - or _. At most 8 widgets show on any
+player's screen: a 9th isn't shown on that screen (no error), and changing or removing those
+already there always works. They stay until removed, or until the lobby comes back. A call that
+changes nothing sends nothing, so it is fine to call it every tick. A "timer" counts down by
+itself: asking for it again with the same seconds doesn't restart it; new seconds do.
+`viewers` is one team or one player; leave it out for everyone (on the host only).
 
 ### removeWidget
 
@@ -437,8 +441,9 @@ marker(id: string, spec: MarkerSpec, viewers?: Viewers): void;
 ```
 
 Shows a marker in the world, or moves or changes the one with this id (ids as for widget). At
-most 16 on any player's screen. `viewers` is one team or one player; leave it out for everyone
-(on the host only).
+most 16 show on any player's screen: a 17th isn't shown on that screen (no error), and changing
+or removing those already there always works. `viewers` is one team or one player; leave it out
+for everyone (on the host only).
 
 ### removeMarker
 
@@ -563,7 +568,8 @@ Calls `handler` when an ability's lunge reaches who it was aimed at.
 onDash(handler: (player: Player) => void): void;
 ```
 
-Calls `handler` when an octopus dashes. Heard on the host only.
+Calls `handler` when an octopus dashes. Heard on the host only. onDash, onInk and onGrab are
+for octopuses only: a mode's own team's ability keys are heard with onAbility.
 
 ### onInk
 
@@ -587,4 +593,4 @@ Calls `handler` when an octopus grabs at something. Heard on the host only.
 onShoot(handler: (player: Player) => void): void;
 ```
 
-Calls `handler` when a diver fires a gun. Heard on the host only.
+Calls `handler` when a diver fires either gun. Heard on the host only.

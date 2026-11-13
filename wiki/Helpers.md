@@ -71,7 +71,7 @@ game.onRoundStart(() => {
 ## tween and Ease
 
 `tween(seconds, step, options?)` calls `step` every tick for `seconds`, with how far along it is,
-from 0 to 1. The last call is always with 1. Give it an `ease` to change how it speeds up and slows
+from 0 to 1. `seconds` is 0 to 86400; anything else throws. The last call is always with 1. Give it an `ease` to change how it speeds up and slows
 down, and a `done` to run at the end. It gives back a timer, so `cancel()` stops it early.
 
 ```ts
@@ -101,7 +101,8 @@ A piece's own `moveTo(x, y, z, seconds)` glides it too, in a straight line at an
 
 A `StateMachine` holds a set of named states and is in one at a time. Each state may say what to do
 going in (`enter`), every tick while in it (`tick`, with the seconds since it went in), and going out
-(`leave`). `go(name)` moves it to another state. It ticks by itself.
+(`leave`). `go(name)` moves it to another state. It ticks by itself, every tick, whatever the
+match's phase (in the lobby too).
 
 If a state calls `go()` on its own machine, write the machine's type out, as below. TypeScript can't
 work it out otherwise.
@@ -156,6 +157,9 @@ it for good.
 `onRoundStart` runs, so there is nothing to reset. `store.add(key)` counts up by one and gives back
 the new count.
 
+Each set of scripts has a store of its own: the map's scripts and the mode's scripts don't share
+one, and each PC's scripts have their own.
+
 ```ts
 // Counts each player's meals this round, and cheers every fifth one.
 game.onEat((player) => {
@@ -171,9 +175,11 @@ game.onEat((player) => {
 
 ## log
 
-`log(...values)` writes a line to the game's log on the PC the script runs on: the host's, for
-scripts on the host. Values are joined by spaces, and objects written as JSON. Use it to see what your
-script is doing while you test.
+`log(...values)` writes a line to the game's log on the PC the script runs on: the host's for
+scripts on the host, and that player's own for `client/` scripts. The log is the console, and the log
+file in the `logs` folder beside the game's settings. Each line starts `map script:` or
+`mode script:`, then the values joined by spaces, with objects written as JSON. Use it to see what
+your script is doing while you test.
 
 ```ts
 game.onCaught((player, by, how) => {

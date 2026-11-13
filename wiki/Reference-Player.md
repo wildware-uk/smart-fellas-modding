@@ -102,7 +102,8 @@ it: it is never sent to players, so a mode can keep roles secret.
 readonly speed: number | null;
 ```
 
-Their speed as a share of normal: 1 is normal, 0 held still; null once gone (on the host only).
+Their speed as a share of normal: 1 is normal, 0 held still; null once gone. On the host it is
+what scripts set; on a player's PC it is what that PC was sent for them (1 if nothing).
 
 ## What you can call
 
@@ -236,8 +237,10 @@ setSpeed(share: number): void;
 ```
 
 Sets their speed as a share of normal, 0 to 3: 0 holds them still (they can still look round and
-use abilities), 1 is normal, 3 is three times as fast. It stays until changed, the round ends, or
-they leave (on the host only).
+use abilities), 1 is normal, 3 is three times as fast. It works for octopuses and divers: it
+scales swimming and crawling, while dashes keep their own pace. A creature a player drives (a
+shark on a mode's team) keeps its own speed. It stays until changed, and goes back to normal
+when a round starts and when the lobby comes back (on the host only).
 
 ### playSound
 
@@ -254,4 +257,5 @@ announce(text: string, seconds?: number): void;
 ```
 
 Shows them alone big text in the middle of the screen, as game.announce does for more players:
-1 to 60 characters, for 0.5 to 15 seconds (3 if left out) (on the host only).
+1 to 60 characters, for 0.5 to 15 seconds (3 if left out). It counts as a message from the map,
+with the same limits as game.say (on the host only).

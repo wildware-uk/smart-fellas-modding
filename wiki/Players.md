@@ -15,7 +15,7 @@ same object, so `===` works, and you can keep one in a variable or a `Map`.
 | `energy` | their energy, or `null` while they have no body |
 | `isBot` | whether the game's AI plays them |
 | `score`, `role` | what your scripts set this round |
-| `speed` | their speed as a share of normal: 1 is normal, 0 is held still (on the host only) |
+| `speed` | their speed as a share of normal: 1 is normal, 0 is held still. On a player's PC, what it was sent (1 if nothing) |
 | `gone` | whether they have left. Then `team`, `life`, `position` and `energy` read as `null` |
 
 On a player's own PC (a `client/` script), a player that PC wasn't sent has no position.
@@ -35,9 +35,12 @@ To find the players near a point, use `game.playersNear` and `game.nearestPlayer
 
 New in API 1.1.0, and on the host only:
 
-- `setSpeed(share)` sets how fast they swim, as a share of normal: 0 to 3. 0 holds them still (they
-  can still look round and use abilities), 1 is normal. It stays until changed, the round ends, or
-  they leave. `speed` reads it back.
+- `setSpeed(share)` sets how fast they swim and crawl, as a share of normal: 0 to 3. 0 holds them
+  still (they can still look round and use abilities), 1 is normal. It works for octopuses and
+  divers; dashes keep their own pace, and a creature a player drives (a shark on a mode's team)
+  keeps its own speed. It stays until changed, and goes back to normal when a round starts and when
+  the lobby comes back. `speed` reads it back, on the host and on players' PCs.
+- `announce` counts as a message from the map, with the same limits as `say`.
 - `playSound(sound)` plays one of the game's [sounds](Sounds.md) for them alone.
 - `announce(text, seconds?)` shows them alone big text in the middle of the screen: see
   [HUD widgets and markers](HUD-Widgets-and-Markers.md).

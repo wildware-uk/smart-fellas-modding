@@ -13,7 +13,7 @@ Calls added; scripts written for 1.0.0 work as they did. Each needs a game that 
 - Finding things near a point: `game.playersNear`, `game.nearestPlayer`, `game.creaturesNear` and
   `game.nearestCreature`.
 - On screen, for everyone, one team or one player: `game.announce` (big text in the middle),
-  `game.widget` and `game.removeWidget` (text, bars, counters and countdowns on the right), and
+  `game.widget` and `game.removeWidget` (text, bars, counters and countdowns on the left), and
   `game.marker` and `game.removeMarker` (markers in the world, seen through rock).
 - For one player: `player.setSpeed` and `player.speed`, `player.playSound` and `player.announce`.
 - `game.playSoundForTeam`: a sound for one team only.

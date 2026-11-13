@@ -13,7 +13,7 @@ How a script talks to players.
 | `player.setCell(column, value)` | everyone | that player's cell in a scoreboard column (for game modes) |
 | `game.announce(text, seconds?, viewers?)` | everyone, a team, or a player | big text in the middle of the screen (on the host only) |
 | `player.announce(text, seconds?)` | that player | big text in the middle of the screen (on the host only) |
-| `game.widget(id, spec, viewers?)` | everyone, a team, or a player | a text line, bar, counter or countdown on the right (on the host only) |
+| `game.widget(id, spec, viewers?)` | everyone, a team, or a player | a text line, bar, counter or countdown on the left, under the banner (on the host only) |
 | `game.marker(id, spec, viewers?)` | everyone, a team, or a player | a marker at a point in the world, seen through rock (on the host only) |
 
 - Chat messages are 1 to 120 characters, and a few a second at most. They pass through each player's

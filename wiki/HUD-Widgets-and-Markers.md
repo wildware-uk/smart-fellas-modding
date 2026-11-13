@@ -1,7 +1,7 @@
 # HUD widgets and markers
 
 Three ways to put things on players' screens beyond chat and the banner: big announcements in the
-middle, widgets down the right side, and markers in the world. New in API 1.1.0.
+middle, widgets down the left side, and markers in the world. New in API 1.1.0.
 
 All of them work on the host only. The host's game decides them and sends them to the players they
 are for; a `client/` script's call does nothing.
@@ -17,9 +17,11 @@ Each call takes `viewers` last:
 ## Announcements
 
 `game.announce(text, seconds?, viewers?)` shows big text in the middle of the screen: 1 to 60
-characters, for 0.5 to 15 seconds (3 if left out). A new one replaces the one showing. At most 2 a
-second reach any one player; more are dropped. `player.announce(text, seconds?)` is the same for one
-player.
+characters, for 0.5 to 15 seconds (3 if left out). A new one replaces the one showing.
+`player.announce(text, seconds?)` is the same for one player.
+
+An announcement counts as a message from the map, so it shares the limits of `game.say`: at most 3 a
+tick and 6 a second for any one player. A call that would go over throws an Error, as `say` does.
 
 ```ts
 // A big "Last minute!" for everyone, and the divers alone get a push.
@@ -40,8 +42,8 @@ every(1, () => {
 
 ## Widgets
 
-`game.widget(id, spec, viewers?)` shows a widget in a column on the right of the screen, or changes the
-one with that `id`. There are four kinds:
+`game.widget(id, spec, viewers?)` shows a widget in a column on the left of the screen, under the
+banner, or changes the one with that `id`. There are four kinds:
 
 | `kind` | Shows | Uses |
 | --- | --- | --- |
@@ -54,10 +56,12 @@ Each may have a `label` above it (0 to 24 characters) and a `colour` (`"#rrggbb"
 out).
 
 - `id` is 1 to 16 letters, digits, `-` or `_`. Call `widget` again with the same id to change it.
-- At most 8 widgets on any player's screen.
+- At most 8 widgets show on any player's screen. A 9th isn't shown on that screen, with no error.
+  Changing or removing the ones already there always works.
 - They stay until `game.removeWidget(id, viewers?)` takes them off, or the lobby comes back.
 - A call that changes nothing sends nothing, so it is fine to call it every tick.
-- A timer counts down by itself. Set it once, not every tick.
+- A timer counts down by itself. Asking for it again with the same `seconds` doesn't restart it, so
+  calling it every tick is fine; change `seconds` to restart it.
 
 ```ts
 // Each player sees their own meals this round, and everyone sees how many octopuses are left.
@@ -95,7 +99,8 @@ with that `id`. Players see it through rock, with how far away it is under it.
 - `label`: the text over it, 0 to 24 characters.
 - `colour`: `"#rrggbb"`, white if left out.
 
-Ids are as for widgets. At most 16 markers on any player's screen. `game.removeMarker(id, viewers?)`
+Ids are as for widgets. At most 16 markers show on any player's screen; a 17th isn't shown there,
+with no error. `game.removeMarker(id, viewers?)`
 takes one off.
 
 ```ts

@@ -210,7 +210,7 @@ interface WidgetSpec {
 }
 ```
 
-One HUD widget (game.widget), drawn in a column on the right of the screen.
+One HUD widget (game.widget), drawn in a column on the left of the screen, under the banner.
 
 ## MarkerSpec
 

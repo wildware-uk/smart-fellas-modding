@@ -275,9 +275,9 @@ declare const Ease: {
 
 ## tween
 
-Calls `step` every tick for `seconds`, with how far along it is: 0 to 1, eased (Ease.linear if
-left out). The last call is always with 1, then `done` is called. Gives back a timer: cancel() it
-to stop it early.
+Calls `step` every tick for `seconds` (0 to 86400; anything else throws), with how far along it
+is: 0 to 1, eased (Ease.linear if left out). The last call is always with 1, then `done` is
+called. Gives back a timer: cancel() it to stop it early.
 
 ```ts
 declare function tween(
@@ -317,8 +317,8 @@ Called when the machine leaves this state.
 
 ## StateMachine
 
-A set of named states, in one at a time, ticked every tick by itself. It goes into `start` at
-once. If a state calls go() on its own machine, give the machine's type by hand:
+A set of named states, in one at a time, ticked every tick by itself, whatever the match's phase
+(in the lobby too). It goes into `start` at once. If a state calls go() on its own machine, give the machine's type by hand:
 `const phases: StateMachine<"wait" | "play"> = new StateMachine({ ... }, "wait");`.
 
 ### new StateMachine
@@ -364,7 +364,8 @@ Stops ticking it, for good.
 ## store
 
 A store of values by name, for this round: it is emptied as each round starts, before your
-onRoundStart runs.
+onRoundStart runs. Each set of scripts has its own: the map's and the mode's don't share one, and
+each PC's scripts have their own.
 
 ### store.get
 
@@ -424,9 +425,11 @@ Forgets everything.
 
 ## log
 
-Writes a line to the game's log on the PC the script runs on (the host's, for scripts on the
-host): the values joined by spaces, objects as JSON. At most 20 lines a second; more are dropped.
-Each line is cut at 200 characters.
+Writes a line to the game's log on the PC the script runs on: the host's for scripts on the host,
+that player's own for client/ scripts. The log is the console, and the log file in the logs folder
+beside the game's settings. Each line starts "map script:" or "mode script:", then the values
+joined by spaces, objects as JSON. At most 20 lines a second; more are dropped. Each line is cut
+at 200 characters.
 
 ```ts
 declare function log(...values: unknown[]): void;
