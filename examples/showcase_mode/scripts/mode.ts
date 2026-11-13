@@ -55,14 +55,9 @@ function showHill(colour: string): void {
 type HillPhase = "idle" | "warmup" | "hold" | "move";
 const phases: StateMachine<HillPhase> = new StateMachine<HillPhase>(
   {
-    idle: {
-      enter() {
-        game.removeMarker("hill");
-        game.removeWidget("phase");
-        game.removeWidget("leader");
-        game.removeWidget("points");
-      },
-    },
+    // A state machine goes into its first state at once, while the script loads, when it can't act
+    // yet: so "idle" does nothing, and the round's end clears the screen.
+    idle: {},
     warmup: {
       enter() {
         hill = nextSpot();
@@ -149,6 +144,10 @@ game.onRoundStart(() => {
 
 game.onRoundEnd(() => {
   phases.go("idle");
+  game.removeMarker("hill");
+  game.removeWidget("phase");
+  game.removeWidget("leader");
+  game.removeWidget("points");
 });
 
 // Count dashes and inks: just for the scoreboard, to show the events.
