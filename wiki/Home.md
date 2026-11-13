@@ -19,12 +19,17 @@ scores, the clock and who wins. Any mode plays on any map.
 
 Each page has a whole script you can copy and run.
 
-- [Players](Players.md): find players, move them, score them, give them roles.
+- [Players](Players.md): find players, move them, score them, give them roles, change their speed.
 - [Events](Events.md): hear the match start, players join, eat, get caught.
 - [Timers](Timers.md): do something later, or every few seconds.
 - [Creatures](Creatures.md): find, spawn and remove creatures and food.
 - [Sounds](Sounds.md): play the game's sounds, for everyone or at a spot.
 - [Messages and HUD](Messages-and-HUD.md): say things, banners, the scoreboard, a player's own line.
+- [HUD widgets and markers](HUD-Widgets-and-Markers.md): big announcements, bars, counters,
+  countdowns and markers in the world.
+- [Finding things](Finding-Things.md): the players and creatures near a point.
+- [Helpers](Helpers.md): maths on points, seeded random numbers, smooth movement, phases, a store
+  for the round, and a log.
 
 ## When you're done
 

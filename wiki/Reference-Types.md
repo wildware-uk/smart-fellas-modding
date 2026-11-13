@@ -186,3 +186,40 @@ type SettingValue = number | string | boolean;
 ```
 
 The value of one of a game mode's lobby settings: a number, a choice's name, or a toggle.
+
+## Viewers
+
+```ts
+type Viewers = Team | Player;
+```
+
+Who sees something on screen (game.announce, game.widget, game.marker): one team, or one player.
+Leave it out for everyone.
+
+## WidgetSpec
+
+```ts
+interface WidgetSpec {
+  kind: "text" | "bar" | "counter" | "timer";
+  label?: string;
+  text?: string;
+  value?: number;
+  max?: number;
+  seconds?: number;
+  colour?: string;
+}
+```
+
+One HUD widget (game.widget), drawn in a column on the right of the screen.
+
+## MarkerSpec
+
+```ts
+interface MarkerSpec {
+  at: Point;
+  label?: string;
+  colour?: string;
+}
+```
+
+A marker (game.marker) at a point in the world, seen through rock, with its distance under it.

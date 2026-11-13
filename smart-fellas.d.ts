@@ -28,7 +28,10 @@
 // - Register handlers once, at the top of a file. The game calls them each tick (64 a second).
 // - Actions such as door.moveTo() are queued and applied after your handlers finish, so what you
 //   read stays as the tick began.
-// - There is no clock (no Date) and no Math.random: use game.seconds and game.random().
+// - There is no clock (no Date) and no Math.random: use game.seconds and game.random(), or a
+//   Random of your own.
+// - Every script also has the helpers at the end of this file: Vec, Maths, Random, Ease, tween,
+//   StateMachine, store and log.
 // - A script that runs too long, uses too much memory, or throws and doesn't catch it is switched
 //   off for the rest of the match, and the host sees one line saying why.
 // - A bad argument (a name that doesn't exist, a point far outside the map) throws an Error you can
@@ -54,6 +57,8 @@
 // - "revives": true if the lobby's Revives setting applies: a netted octopus may be freed.
 // The calls marked "for game modes" change the round's rules. A map's script may use them too, and
 // the mode then hears what happened through its own events (onTeamChange, onRoundEnd).
+// The calls marked "on the host only" work only in the host's game: a client/ script's call does
+// nothing. The host's game decides them and sends them to the players they are for.
 
 /** A point in the map, in metres. y is up. */
 interface Point {
@@ -193,6 +198,40 @@ type EndWhy = "allCaught" | "allTurned" | "timeUp" | "diversLeft" | "octopusesLe
 type SettingValue = number | string | boolean;
 
 /**
+ * Who sees something on screen (game.announce, game.widget, game.marker): one team, or one player.
+ * Leave it out for everyone.
+ */
+type Viewers = Team | Player;
+
+/** One HUD widget (game.widget), drawn in a column on the right of the screen. */
+interface WidgetSpec {
+  /** "text": a line of text; "bar": a filling bar; "counter": a number; "timer": a countdown. */
+  kind: "text" | "bar" | "counter" | "timer";
+  /** The small label above it, 0 to 24 characters. */
+  label?: string;
+  /** "text": what it says, 0 to 40 characters. */
+  text?: string;
+  /** "bar": how full, 0 to max; "counter": the number shown (whole numbers shown without decimals). */
+  value?: number;
+  /** "bar": the value that fills it (1 if left out). */
+  max?: number;
+  /** "timer": the seconds it counts down from, now (0 to 86400). Shown as m:ss, stops at 0:00. */
+  seconds?: number;
+  /** Its colour, "#rrggbb" (white if left out). */
+  colour?: string;
+}
+
+/** A marker (game.marker) at a point in the world, seen through rock, with its distance under it. */
+interface MarkerSpec {
+  /** Where it is, within 1000 m of the map's middle. */
+  at: Point;
+  /** The text over it, 0 to 24 characters. */
+  label?: string;
+  /** Its colour, "#rrggbb" (white if left out). */
+  colour?: string;
+}
+
+/**
  * A player in the match. The same player is always the same object, so === works. Once they have
  * left, `gone` is true, what they were reads as null, and what you ask of them does nothing.
  */
@@ -276,6 +315,22 @@ interface Player {
    * comes back: 0 to 80 characters, "" to clear it. It is on screen, not in chat (for game modes).
    */
   setLine(text: string): void;
+
+  /** Their speed as a share of normal: 1 is normal, 0 held still; null once gone (on the host only). */
+  readonly speed: number | null;
+  /**
+   * Sets their speed as a share of normal, 0 to 3: 0 holds them still (they can still look round and
+   * use abilities), 1 is normal, 3 is three times as fast. It stays until changed, the round ends, or
+   * they leave (on the host only).
+   */
+  setSpeed(share: number): void;
+  /** Plays one of the game's sounds for them alone, wherever they are (on the host only). */
+  playSound(sound: SoundName): void;
+  /**
+   * Shows them alone big text in the middle of the screen, as game.announce does for more players:
+   * 1 to 60 characters, for 0.5 to 15 seconds (3 if left out) (on the host only).
+   */
+  announce(text: string, seconds?: number): void;
 }
 
 /** A trigger box placed on the map, found by name with game.zone(). */
@@ -399,12 +454,29 @@ interface Game {
    */
   spawn(kind: CreatureKind, x: number, y: number, z: number): Creature;
 
+  /**
+   * Living players with a position within `radius` metres of `point`, nearest first; only `team`'s if
+   * given. On a player's PC it finds only the players that PC was sent.
+   */
+  playersNear(point: Point, radius: number, team?: Team): Player[];
+  /**
+   * The nearest living player with a position, of `team` if given, leaving out `except` (say, the
+   * player asking); or null if there is none.
+   */
+  nearestPlayer(point: Point, team?: Team, except?: Player): Player | null;
+  /** Living creatures and food within `radius` metres of `point`, nearest first; only `kind`'s if given. */
+  creaturesNear(point: Point, radius: number, kind?: CreatureKind): Creature[];
+  /** The nearest living creature or food, of `kind` if given; or null if there is none. */
+  nearestCreature(point: Point, kind?: CreatureKind): Creature | null;
+
   /** Shows everyone a message from the map: 1 to 120 characters, a few a second at most. */
   say(text: string): void;
   /** Shows one team a message from the map. */
   sayToTeam(team: Team, text: string): void;
   /** Plays one of the game's sounds for everyone, wherever they are. A few a second at most. */
   playSound(sound: SoundName): void;
+  /** Plays one of the game's sounds for one team only, wherever they are (on the host only). */
+  playSoundForTeam(team: Team, sound: SoundName): void;
   /** Plays one of the game's sounds at a point, heard by whoever is near. */
   playSoundAt(sound: SoundName, x: number, y: number, z: number): void;
   /** The names of the sounds a map can play. */
@@ -500,6 +572,37 @@ interface Game {
   /** Shows everyone a banner across the top: 0 to 80 characters, "" to clear it (for game modes). */
   banner(text: string): void;
 
+  /**
+   * Shows big text in the middle of the screen: 1 to 60 characters, for `seconds` (0.5 to 15, 3 if
+   * left out). A new one replaces the one showing. At most 2 a second for any one player; more are
+   * dropped. `viewers` is one team or one player; leave it out for everyone (on the host only).
+   */
+  announce(text: string, seconds?: number, viewers?: Viewers): void;
+  /**
+   * Shows a HUD widget, or changes the one with this id: `id` is 1 to 16 letters, digits, - or _.
+   * At most 8 widgets on any player's screen. They stay until removed, or until the lobby comes
+   * back. A call that changes nothing sends nothing, so it is fine to call it every tick. A "timer"
+   * counts down by itself: set it once. `viewers` is one team or one player; leave it out for
+   * everyone (on the host only).
+   */
+  widget(id: string, spec: WidgetSpec, viewers?: Viewers): void;
+  /**
+   * Takes the widget with this id off the screens of `viewers`, or everyone's if left out (on the
+   * host only).
+   */
+  removeWidget(id: string, viewers?: Viewers): void;
+  /**
+   * Shows a marker in the world, or moves or changes the one with this id (ids as for widget). At
+   * most 16 on any player's screen. `viewers` is one team or one player; leave it out for everyone
+   * (on the host only).
+   */
+  marker(id: string, spec: MarkerSpec, viewers?: Viewers): void;
+  /**
+   * Takes the marker with this id off the screens of `viewers`, or everyone's if left out (on the
+   * host only).
+   */
+  removeMarker(id: string, viewers?: Viewers): void;
+
   /** Calls `handler` once, when the match starts. */
   onMatchStart(handler: () => void): void;
   /** Calls `handler` when a round starts. */
@@ -538,6 +641,14 @@ interface Game {
   onAbility(handler: (player: Player, ability: string, target: Player) => void): void;
   /** Calls `handler` when an ability's lunge reaches who it was aimed at. */
   onAbilityLand(handler: (player: Player, ability: string, target: Player) => void): void;
+  /** Calls `handler` when an octopus dashes. Heard on the host only. */
+  onDash(handler: (player: Player) => void): void;
+  /** Calls `handler` when an octopus squirts ink. Heard on the host only. */
+  onInk(handler: (player: Player) => void): void;
+  /** Calls `handler` when an octopus grabs at something. Heard on the host only. */
+  onGrab(handler: (player: Player) => void): void;
+  /** Calls `handler` when a diver fires a gun. Heard on the host only. */
+  onShoot(handler: (player: Player) => void): void;
 }
 
 /** The match. */
@@ -549,3 +660,168 @@ declare function after(seconds: number, handler: () => void): TimerId;
 declare function every(seconds: number, handler: () => void): TimerId;
 /** Stops a timer after() or every() gave back. Says whether it was still waiting. */
 declare function cancel(timer: TimerId): boolean;
+
+// Helpers: plain JavaScript every script has, on the host and on players' PCs alike. They change
+// nothing in the match by themselves.
+
+/** Vector maths on points ({x, y, z}). Every call gives back a new point and leaves its inputs alone. */
+declare const Vec: {
+  /** A point from its three parts. */
+  of(x: number, y: number, z: number): Point;
+  /** The point {0, 0, 0}. */
+  readonly zero: Point;
+  /** The point {0, 1, 0}: one metre straight up. */
+  readonly up: Point;
+  /** a and b added together. */
+  add(a: Point, b: Point): Point;
+  /** b taken away from a: the way from b to a. */
+  sub(a: Point, b: Point): Point;
+  /** a made `by` times as long. */
+  scale(a: Point, by: number): Point;
+  /** How long a is, in metres. */
+  length(a: Point): number;
+  /** How far apart a and b are, in metres. */
+  distance(a: Point, b: Point): number;
+  /** a made 1 long, pointing the same way; or Vec.zero if a has no length. */
+  normalize(a: Point): Point;
+  /** The dot product of a and b. */
+  dot(a: Point, b: Point): number;
+  /** The cross product of a and b: a point at right angles to both. */
+  cross(a: Point, b: Point): Point;
+  /** The point `t` of the way from a to b: t 0 is a, 1 is b, 0.5 halfway. */
+  lerp(a: Point, b: Point, t: number): Point;
+  /** a with y set to 0: for distances across the map, ignoring depth. */
+  flat(a: Point): Point;
+};
+
+/** Number helpers the built-in Math lacks. */
+declare const Maths: {
+  /** value kept from low to high. */
+  clamp(value: number, low: number, high: number): number;
+  /** The number `t` of the way from `from` to `to`: t 0 is from, 1 is to. */
+  lerp(from: number, to: number, t: number): number;
+  /** How far value is from `from` to `to`, as 0 to 1 (not clamped: it can be below 0 or above 1). */
+  inverseLerp(from: number, to: number, value: number): number;
+  /** value moved from the range inLow to inHigh into the range outLow to outHigh. */
+  remap(value: number, inLow: number, inHigh: number, outLow: number, outHigh: number): number;
+  /** Degrees to radians. */
+  toRadians(degrees: number): number;
+  /** Radians to degrees. */
+  toDegrees(radians: number): number;
+  /** degrees brought into the range above -180 and up to 180. */
+  wrapDegrees(degrees: number): number;
+  /** current moved towards target by at most step, never past it. */
+  approach(current: number, target: number, step: number): number;
+};
+
+/**
+ * Random numbers from a seed of your own: the same seed gives the same numbers, in the same order,
+ * on every PC. Use game.random() for numbers nobody can guess ahead.
+ */
+declare class Random {
+  /** A series of random numbers that starts from `seed`. */
+  constructor(seed: number);
+  /** A number from 0 up to (not including) 1. */
+  next(): number;
+  /** A number from low up to (not including) high. */
+  range(low: number, high: number): number;
+  /** A whole number from low to high, both included. */
+  int(low: number, high: number): number;
+  /** true with the chance `p`: 0 never, 1 always, 0.25 one time in four. */
+  chance(p: number): boolean;
+  /** One item of the list, or undefined if it is empty. */
+  pick<T>(list: readonly T[]): T | undefined;
+  /** Shuffles the list in place and gives it back. */
+  shuffle<T>(list: T[]): T[];
+}
+
+/** An easing curve: takes t from 0 to 1 and gives back the eased value (0 at 0, 1 at 1). */
+type Easing = (t: number) => number;
+
+/**
+ * Easing curves, for tween() or to call yourself, as in Maths.lerp(a, b, Ease.outQuad(t)). "in"
+ * starts slow, "out" ends slow, "inOut" does both. outBack goes a little past the end and settles
+ * back, outBounce bounces, outElastic wobbles.
+ */
+declare const Ease: {
+  linear: Easing;
+  inQuad: Easing;
+  outQuad: Easing;
+  inOutQuad: Easing;
+  inCubic: Easing;
+  outCubic: Easing;
+  inOutCubic: Easing;
+  inSine: Easing;
+  outSine: Easing;
+  inOutSine: Easing;
+  outBack: Easing;
+  outBounce: Easing;
+  outElastic: Easing;
+};
+
+/**
+ * Calls `step` every tick for `seconds`, with how far along it is: 0 to 1, eased (Ease.linear if
+ * left out). The last call is always with 1, then `done` is called. Gives back a timer: cancel() it
+ * to stop it early.
+ */
+declare function tween(
+  seconds: number,
+  step: (t: number) => void,
+  options?: { ease?: Easing; done?: () => void },
+): TimerId;
+
+/** One state of a StateMachine. Each part is optional. */
+interface State {
+  /** Called when the machine goes into this state. */
+  enter?(): void;
+  /** Called every tick while in this state, with the seconds since it went in. */
+  tick?(seconds: number): void;
+  /** Called when the machine leaves this state. */
+  leave?(): void;
+}
+
+/**
+ * A set of named states, in one at a time, ticked every tick by itself. It goes into `start` at
+ * once. If a state calls go() on its own machine, give the machine's type by hand:
+ * `const phases: StateMachine<"wait" | "play"> = new StateMachine({ ... }, "wait");`.
+ */
+declare class StateMachine<S extends string = string> {
+  /** The states by name, and the one to start in. */
+  constructor(states: Record<S, State>, start: S);
+  /** The state it is in. */
+  readonly state: S;
+  /** Seconds since it went into the state it is in. */
+  readonly seconds: number;
+  /** Leaves the state it is in and goes into `state`. Going into the same one starts it again. */
+  go(state: S): void;
+  /** Stops ticking it, for good. */
+  stop(): void;
+}
+
+/**
+ * A store of values by name, for this round: it is emptied as each round starts, before your
+ * onRoundStart runs.
+ */
+declare const store: {
+  /** The value kept under `key`, or `fallback` if there is none. */
+  get<T = unknown>(key: string, fallback?: T): T;
+  /** Keeps `value` under `key`. */
+  set(key: string, value: unknown): void;
+  /** Adds `by` (1 if left out) to the number kept under `key` (0 if none) and gives back the sum. */
+  add(key: string, by?: number): number;
+  /** Whether anything is kept under `key`. */
+  has(key: string): boolean;
+  /** Forgets `key`. Says whether anything was kept under it. */
+  delete(key: string): boolean;
+  /** Every key with something kept under it. */
+  keys(): string[];
+  /** Forgets everything. */
+  clear(): void;
+};
+
+/**
+ * Writes a line to the game's log on the PC the script runs on (the host's, for scripts on the
+ * host): the values joined by spaces, objects as JSON. At most 20 lines a second; more are dropped.
+ * Each line is cut at 200 characters.
+ */
+declare function log(...values: unknown[]): void;

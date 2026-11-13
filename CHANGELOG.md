@@ -2,6 +2,25 @@
 
 What changed in the Smart Fellas scripting API, its examples and its wiki, newest first.
 
+## 1.1.0
+
+Calls added; scripts written for 1.0.0 work as they did. Each needs a game that knows API 1.1.0.
+
+- Helpers in every script: `Vec` (maths on points), `Maths` (clamp, lerp, remap and more), `Random`
+  (random numbers from a seed, the same on every PC), `Ease` and `tween` (smooth movement over
+  time), `StateMachine` (named phases, one at a time), `store` (values for this round, emptied as
+  each round starts) and `log` (a line in the game's log).
+- Finding things near a point: `game.playersNear`, `game.nearestPlayer`, `game.creaturesNear` and
+  `game.nearestCreature`.
+- On screen, for everyone, one team or one player: `game.announce` (big text in the middle),
+  `game.widget` and `game.removeWidget` (text, bars, counters and countdowns on the right), and
+  `game.marker` and `game.removeMarker` (markers in the world, seen through rock).
+- For one player: `player.setSpeed` and `player.speed`, `player.playSound` and `player.announce`.
+- `game.playSoundForTeam`: a sound for one team only.
+- New events: `game.onDash`, `game.onInk`, `game.onGrab` and `game.onShoot`.
+- A new example mode, King of the Reef (`examples/showcase_mode`), that uses most of the above.
+- Wiki: new pages Helpers, Finding things, and HUD widgets and markers; a Helpers reference page.
+
 ## 1.0.0
 
 - The scripting API for Smart Fellas maps and game modes in a repository of its own: the types file,
