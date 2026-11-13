@@ -61,8 +61,8 @@ makes it safe to play a stranger's map.
 
 - **No files, no network, no loading other code.** There's no `fetch`, `require` or `import`.
 - **No clock.** `Date` isn't there. Use `game.seconds` (the match's time) and the timers.
-- **No `Math.random`.** Use `game.random()`. It gives the same numbers on every host for the same
-  match, so a bug you see once you can see again.
+- **No `Math.random`.** Use `game.random()`, a number from 0 up to 1. Each copy of a script has its
+  own series: a `shared/` script on a player's PC gets different numbers from the host's.
 
 ## The limits, and why
 

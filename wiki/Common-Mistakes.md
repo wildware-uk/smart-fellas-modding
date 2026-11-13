@@ -72,7 +72,7 @@ every(5, () => {
 ## Using Date or Math.random
 
 They aren't there. `game.seconds` is the match's time, and `game.random()` gives a number from 0 up
-to 1 that every host agrees on for the same match.
+to 1.
 
 ## import, export, enum, namespace
 

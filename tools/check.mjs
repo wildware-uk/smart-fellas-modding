@@ -150,7 +150,7 @@ function refuseWhatTheGameLacks(source, piece) {
     } else if (ts.isIdentifier(node) && node.text === "Date" && !ts.isPropertyAccessExpression(node.parent)) {
       say(node, "a script has no clock: use game.seconds or game.ticks, not Date.");
     } else if (ts.isPropertyAccessExpression(node) && node.getText(source) === "Math.random") {
-      say(node, "a script has no Math.random: use game.random(), which every player's game agrees on.");
+      say(node, "a script has no Math.random: use game.random() instead.");
     } else if (ts.isCallExpression(node) && ts.isIdentifier(node.expression) && node.expression.text === "require") {
       say(node, "a script can't load other code: the game loads every script in the folder itself.");
     }

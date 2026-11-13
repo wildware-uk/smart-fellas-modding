@@ -188,35 +188,36 @@ A mode may add up to two teams of its own, whose players each drive a creature. 
 with `game.setBots`.
 
 ```ts
-// A team of sharks hunting octopuses beside the divers, with a lunge on the Dash key.
+// Reef guards: a team that defends the reef against the divers. Each guard drives a shark, with a
+// short snap on the Ink key.
 game.onMatchStart(() => {
-  game.registerTeam("shark", {
-    name: "Sharks",
-    colour: "#a9d2ec",
+  game.registerTeam("guard", {
+    name: "Reef Guards",
+    colour: "#e0a040",
     body: "shark",
-    most: 3,
-    line: "Hunt from below",
-    startLine: "You are a shark: bite an octopus",
+    most: 2,
+    line: "Keep the divers off the reef",
+    startLine: "Guard the reef: snap at divers",
   });
-  game.registerAbility("lunge", {
-    team: "shark",
-    slot: 1,
-    name: "Lunge",
-    cooldown: 8,
-    range: 14,
-    lunge: { speed: 22, metres: 14 },
+  game.registerAbility("snap", {
+    team: "guard",
+    slot: 2,
+    name: "Snap",
+    cooldown: 15,
+    range: 6,
+    lunge: { speed: 12, metres: 6 },
   });
-  game.setBots("shark", 1);
+  game.setBots("guard", 1);
 });
 
 game.onAbilityLand((player, ability, target) => {
-  if (ability === "lunge" && target.team === "octopus") {
+  if (ability === "snap" && target.team === "diver") {
     player.bite(target);
   }
 });
 
 game.onJoin((player) => {
-  if (player.isBot && player.team === "shark") {
+  if (player.isBot && player.team === "guard") {
     player.setGoal("hunt");
   }
 });
@@ -229,7 +230,7 @@ game.onTimeUp(() => {
 The game shows an ability to its team as a round button with its key, its name and its cooldown, and
 aims it: it goes off only at someone they can see near the middle of their screen. What it does is up
 to your handlers. For a picture on the button, put a square PNG named after the ability's id in
-`icons/`, such as `icons/lunge.png`: up to 512 KB and 1024 pixels across, and 8 in a mode. It's
+`icons/`, such as `icons/snap.png`: up to 512 KB and 1024 pixels across, and 8 in a mode. It's
 drawn round, so keep what matters away from the corners.
 
 ## Bots
