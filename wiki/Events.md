@@ -18,7 +18,7 @@ An event is the game telling your script that something happened. You give it a 
 | `game.onCaught` | a player is caught | the player, who caught them (or `null`), and how: `"jaws"` or `"net"` |
 | `game.onKilled` | a player is killed | the player, and who killed them (or `null`) |
 | `game.onAbility`, `game.onAbilityLand` | a mode's ability is used, or its lunge lands | the user, the ability's id, the target |
-| `game.onDash` | an octopus dashes | the player |
+| `game.onDash` | a player dashes (octopuses only) | the player |
 | `game.onInk` | an octopus squirts ink | the player |
 | `game.onGrab` | an octopus grabs at something | the player |
 | `game.onShoot` | a diver fires either gun | the player |

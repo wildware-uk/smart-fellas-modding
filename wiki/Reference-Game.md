@@ -568,7 +568,7 @@ Calls `handler` when an ability's lunge reaches who it was aimed at.
 onDash(handler: (player: Player) => void): void;
 ```
 
-Calls `handler` when an octopus dashes. Heard on the host only. onDash, onInk and onGrab are
+Calls `handler` when a player dashes (octopuses only). Heard on the host only. onDash, onInk and onGrab are
 for octopuses only: a mode's own team's ability keys are heard with onAbility.
 
 ### onInk
