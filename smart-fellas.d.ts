@@ -594,8 +594,9 @@ interface Game {
    * changes nothing sends nothing, so it is fine to call it every tick; when a script changes a lot
    * at once, each player is sent a few changes a tick and the latest of each wins. A "timer" counts
    * down by itself: asking for it again with the same seconds doesn't restart it; new seconds do.
-   * A player who joins later sees what is showing for everyone and for their team. A map's and a
-   * mode's widgets never share an id. `viewers` is one team or one player; leave it out for
+   * A player who joins later sees what is showing for everyone and for their team, and one who
+   * moves to another team swaps the old team's for the new one's. A map's and a mode's widgets
+   * never share an id, and a client/ script's own widgets have their own room of 8. `viewers` is one team or one player; leave it out for
    * everyone (in a client/ script, on that player's own screen only).
    */
   widget(id: string, spec: WidgetSpec, viewers?: Viewers): void;

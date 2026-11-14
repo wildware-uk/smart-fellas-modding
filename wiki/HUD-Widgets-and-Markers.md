@@ -62,7 +62,10 @@ out).
 - A call that changes nothing sends nothing, so it is fine to call it every tick. When a script
   changes a lot at once, each player is sent a few changes a tick, and the latest of each wins.
 - A player who joins later sees the widgets and markers showing for everyone and for their team.
+  One who moves to another team (`player.setTeam`) swaps the old team's for the new team's; what
+  was shown to them alone stays.
 - A map's script and a mode's script never share an id: each has its own widgets and markers.
+- A `client/` script's own widgets and markers have their own room: they never take the host's.
 - A timer counts down by itself. Asking for it again with the same `seconds` doesn't restart it, so
   calling it every tick is fine; change `seconds` to restart it.
 
