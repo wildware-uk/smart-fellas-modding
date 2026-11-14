@@ -67,14 +67,15 @@ A number from 0 up to (not including) 1, the same series for the same match.
 ### endRound
 
 ```ts
-endRound(winner: Team | Player | "draw", why?: EndWhy): void;
+endRound(winner: Team | Player | "draw", why?: EndWhy | null, text?: string): void;
 ```
 
 Ends the round, with `winner` the team that won it, or one player (where everyone plays for
 themselves, in a game mode), or "draw" for nobody. The results say why with the game's own line
 named by `why`, or else that the map (or the game mode) decided. `why` must fit the winning
 team: "allCaught", "allTurned" and "octopusesLeft" are the divers' wins, "timeUp" and
-"diversLeft" the octopuses'.
+"diversLeft" the octopuses'. Give `text` (up to 80 characters) to say why in your own words
+instead; pass null for `why` to give only that: game.endRound("red", null, "Red held the reef").
 
 ### addTime
 
@@ -494,6 +495,38 @@ removeMarker(id: string, viewers?: Viewers): void;
 Takes the marker with this id off the screens of `viewers`, or everyone's if left out
 (in a client/ script, on that player's own screen only).
 
+### menu
+
+```ts
+menu(id: string, spec: MenuSpec, viewers?: Viewers): void;
+```
+
+Opens a menu (ids as for widget) on the screens of `viewers`, or everyone's if left out. A
+player has one menu at a time: a new one takes the place of the one they have. A pick calls
+game.onChoose's handlers and closes the menu for that player; open it again to let them pick
+again. It is shown to who is in the match now, not to players who join later, and the lobby
+closes every menu. Host scripts only: in a client/ script it does nothing. At most 16 menu
+and removeMenu calls a tick; more throws.
+
+### removeMenu
+
+```ts
+removeMenu(id: string, viewers?: Viewers): void;
+```
+
+Closes the menu with this id for `viewers`, or everyone, if they still have it.
+
+### vote
+
+```ts
+vote(spec: VoteSpec, viewers?: Viewers): Promise<VoteResult>;
+```
+
+Puts a question to `viewers` (or everyone) as a menu, and settles with how it came out once
+`seconds` are up or every person shown it has answered, whichever comes first. Each person's
+first pick counts; bots never answer and aren't waited for. Its menu's id is "vote-" and a
+number, and its picks reach game.onChoose too. Host scripts only.
+
 ### onMatchStart
 
 ```ts
@@ -634,3 +667,13 @@ onShoot(handler: (player: Player) => void): void;
 ```
 
 Calls `handler` when a diver fires either gun. Heard on the host only.
+
+### onChoose
+
+```ts
+onChoose(handler: (player: Player, menu: string, choice: number, text: string) => void): void;
+```
+
+Calls `handler` when a player picks from a menu this script opened (game.menu), with the menu's
+id, where the choice is in its list (0 for the first) and the choice's text. Each menu a player
+is shown is picked from once at most; a pick after it closed is never heard.
