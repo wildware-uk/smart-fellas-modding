@@ -2,6 +2,19 @@
 
 What changed in the Smart Fellas scripting API, its examples and its wiki, newest first.
 
+## 1.6.0
+
+Calls added; scripts written for 1.0.0 to 1.5.0 work as they did. Each needs a game that knows API
+1.6.0.
+
+- Markers on players: `MarkerSpec` takes `on: player` in place of `at`, and the marker rides over
+  them. A screen shows it only while it is sent that player's body.
+- The objects a call takes (a marker's, a widget's, a menu's, the water's, a light's, a team's, an
+  ability's, and points) are read for the values they hold themselves. A value that comes from a
+  getter, from the object's prototype or through a `Proxy` reads as left out, and a script's own code
+  never runs inside a call. Object literals and `Vec` points work as before.
+- Wiki: an example on HUD widgets and markers.
+
 ## 1.5.0
 
 Calls added; scripts written for 1.0.0 to 1.4.0 work as they did. Each needs a game that knows API

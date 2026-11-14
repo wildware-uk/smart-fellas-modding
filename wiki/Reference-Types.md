@@ -287,7 +287,8 @@ What game.vote asks: like a menu, but `seconds` must be given, from 1 to 600.
 
 ```ts
 interface MarkerSpec {
-  at: Point;
+  at?: Point;
+  on?: Player;
   label?: string;
   colour?: string;
 }
