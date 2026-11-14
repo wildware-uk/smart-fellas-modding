@@ -241,6 +241,9 @@ drawn round, so keep what matters away from the corners.
 - `player.setGoal(goal)` tells a bot what to be after: `"own"` (its usual play), `"hide"`, `"flee"`,
   `"roam"`, `"hunt"`, or `"goTo"` with a point. A bot on a team your mode added heeds `"own"` and
   `"hunt"` only.
+- `player.setBotLevel(level)` makes one bot play `"easy"`, `"normal"` or `"hard"` from now on, and
+  `player.botLevel` reads it (on the host; `null` for a person). Bots start at the lobby's bot skill,
+  and go back to the level they joined at when your mode is done.
 - `player.removeBot()` takes one bot out.
 
 ```ts
@@ -256,6 +259,8 @@ game.onRoundStart(() => {
   for (const player of game.players()) {
     if (player.isBot) {
       player.setGoal(player.team === "diver" ? "hunt" : "flee");
+      // The hunters are sharp; the ones running are easy to catch.
+      player.setBotLevel(player.team === "diver" ? "hard" : "easy");
     }
   }
 });

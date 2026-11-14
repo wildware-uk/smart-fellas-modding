@@ -2,6 +2,15 @@
 
 What changed in the Smart Fellas scripting API, its examples and its wiki, newest first.
 
+## 1.7.0
+
+Calls added; scripts written for 1.0.0 to 1.6.0 work as they did. Each needs a game that knows API
+1.7.0.
+
+- Bot levels: `player.setBotLevel(level)` makes one bot play `"easy"`, `"normal"` or `"hard"` from
+  now on (a new type, `BotLevel`), and `player.botLevel` reads it on the host.
+- Wiki: the bots example on Game modes sets levels.
+
 ## 1.6.0
 
 Calls added; scripts written for 1.0.0 to 1.5.0 work as they did. Each needs a game that knows API

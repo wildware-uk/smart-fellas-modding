@@ -99,6 +99,14 @@ type Skill = "dash" | "ink" | "grab" | "smell" | "shoot";
 Something a player does that a script may switch off for them alone, with player.allow(): an
 octopus's dash, ink, grab and smell, and a diver's gun ("shoot", whichever gun they carry).
 
+## BotLevel
+
+```ts
+type BotLevel = "easy" | "normal" | "hard";
+```
+
+How well a bot plays, the same choices as the lobby's bot skill (player.setBotLevel). New in 1.7.0.
+
 ## Life
 
 ```ts

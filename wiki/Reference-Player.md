@@ -96,6 +96,15 @@ readonly role: string;
 Their role this round, as the match's scripts set it ("" for none). Only the host's scripts know
 it: it is never sent to players, so a mode can keep roles secret.
 
+### botLevel
+
+```ts
+readonly botLevel: BotLevel | null;
+```
+
+How well this bot plays: it starts at the lobby's bot skill. null for a person, and in every
+script on a player's PC, which isn't told. New in 1.7.0.
+
 ### speed
 
 ```ts
@@ -210,6 +219,17 @@ setGoal(goal: Goal, x?: number, y?: number, z?: number): void;
 ```
 
 Gives this bot something to be after; "goTo" takes a point (bots only, for game modes).
+
+### setBotLevel
+
+```ts
+setBotLevel(level: BotLevel): void;
+```
+
+Makes this bot play at `level` from now on: how fast it reacts, turns and aims, how much it
+notices, and how hard it chases; the rest of its ways stay its own. Other bots keep theirs. It
+stays through rounds until the mode is done, when the bot goes back to the level it joined at
+(bots only, for game modes). New in 1.7.0.
 
 ### bite
 
