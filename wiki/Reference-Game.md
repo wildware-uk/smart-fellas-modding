@@ -527,6 +527,45 @@ Puts a question to `viewers` (or everyone) as a menu, and settles with how it ca
 first pick counts; bots never answer and aren't waited for. Its menu's id is "vote-" and a
 number, and its picks reach game.onChoose too. Host scripts only.
 
+### setWater
+
+```ts
+setWater(spec: WaterSpec, seconds?: number): void;
+```
+
+Changes the water for everyone: its colour, how far anyone sees through it and how bright it
+is, each left as the map has it when left out. It fades in over `seconds` (0 to 60; at once if
+left out). A new call takes the place of the last, from the water shown then. Players who join
+later get it, and the lobby gives back the map's own. Host scripts only: in a client/ script it
+does nothing.
+
+### resetWater
+
+```ts
+resetWater(seconds?: number): void;
+```
+
+Gives back the map's own water, fading over `seconds` (0 to 60; at once if left out).
+
+### light
+
+```ts
+light(id: string, spec: LightSpec): void;
+```
+
+Puts up a light for everyone, or moves or changes the one with this id (ids as for widget). At
+most 16 are up at once, the map's and the mode's together: a 17th isn't put up (no error), and
+changing or removing those already up always works. Lights cast no shadows. Players who join
+later get them, and the lobby takes them all down. Host scripts only.
+
+### removeLight
+
+```ts
+removeLight(id: string): void;
+```
+
+Takes down the light with this id, if it is up.
+
 ### onMatchStart
 
 ```ts
