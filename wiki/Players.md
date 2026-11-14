@@ -16,6 +16,8 @@ same object, so `===` works, and you can keep one in a variable or a `Map`.
 | `isBot` | whether the game's AI plays them |
 | `score`, `role` | what your scripts set this round |
 | `speed` | their speed as a share of normal: 1 is normal, 0 is held still. On a player's PC, what it was sent (1 if nothing) |
+| `allowed(skill)` | whether a skill works for them: `true` unless a script switched it off |
+| `data` | a store of values of their own, kept for the whole match |
 | `gone` | whether they have left. Then `team`, `life`, `position` and `energy` read as `null` |
 
 On a player's own PC (a `client/` script), a player that PC wasn't sent has no position.
@@ -27,6 +29,7 @@ On a player's own PC (a `client/` script), a player that PC wasn't sent has no p
 - For game modes: `setTeam`, `setRole`, `setScore`, `addScore`, `setCell`, `bite`, and for bots
   `setGoal` and `removeBot`. See [Game modes](Game-Modes.md).
 - `setSpeed(share)` (on the host only), `playSound(sound)` and `announce(text, seconds?)`. See below.
+- `allow(skill, allowed)` (on the host only): switch one of their skills off or on. See below.
 
 To find the players near a point, use `game.playersNear` and `game.nearestPlayer`: see
 [Finding things](Finding-Things.md).
@@ -55,6 +58,58 @@ game.onRespawn((player) => {
   after(5, () => {
     player.setSpeed(1);
   });
+});
+```
+
+## Switching skills off
+
+New in API 1.2.0, on the host only. `allow(skill, false)` switches one skill off for that player
+alone, and `allow(skill, true)` gives it back. The skills are an octopus's `"dash"`, `"ink"`,
+`"grab"` and `"smell"`, and a diver's `"shoot"` (whichever gun they carry).
+
+- A skill switched off does nothing when they use it: pressing it (or starting to hold smell) plays
+  a soft "no", an octopus's button for it shows faint, and a diver's crosshair dot dims.
+- Switching `"grab"` off lets go of whatever they hold. Ink or a shot already on its way finishes.
+- It stays through deaths and respawns, and every skill comes back as a round starts and when the
+  lobby comes back. Switch skills off in `onRoundStart`.
+- `allowed(skill)` reads it back, on the host and on players' PCs.
+
+```ts
+// Divers can't shoot for the first 20 seconds of each round, so octopuses get a head start, and
+// octopuses can't smell, so they hide by sight alone.
+game.onRoundStart(() => {
+  for (const player of game.players()) {
+    if (player.team === "diver") {
+      player.allow("shoot", false);
+      player.announce("Hold fire...", 3);
+      after(20, () => player.allow("shoot", true));
+    } else if (player.team === "octopus") {
+      player.allow("smell", false);
+    }
+  }
+});
+```
+
+## Data of their own
+
+New in API 1.2.0. `player.data` is a store of values for that one player, with the same calls as
+[`store`](Helpers.md#store): `get(key, fallback?)`, `set`, `add`, `has`, `delete`, `keys` and
+`clear`. It differs from `store` in what it lasts for:
+
+- It is kept from round to round, for the whole match, where `store` empties each round.
+- It is let go at the first round start after the player leaves, so `onLeave` can still read it.
+- Each set of scripts has its own: the map's and the mode's don't share it, and each PC's scripts
+  have their own.
+
+```ts
+// Count each player's wins over the match, and say so when they leave.
+game.onRoundEnd((winner) => {
+  for (const player of game.players()) {
+    if (player.team === winner) player.data.add("wins");
+  }
+});
+game.onLeave((player) => {
+  game.say(`${player.name} leaves with ${player.data.get("wins", 0)} wins`);
 });
 ```
 

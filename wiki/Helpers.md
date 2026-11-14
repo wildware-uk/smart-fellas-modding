@@ -13,7 +13,7 @@ themselves. New in API 1.1.0.
 | `Ease` | easing curves: smooth starts and stops, bounces, wobbles |
 | `tween(seconds, step, options?)` | calls `step` every tick for a while, with how far along it is |
 | `StateMachine` | named states, one at a time: what to do going in, every tick, and going out |
-| `store` | values by name for this round, emptied as each round starts |
+| `store` | values by name for this round, emptied as each round starts (for one player's values over the match, see `player.data` in [Players](Players.md)) |
 | `log(...values)` | a line in the game's log, for finding bugs |
 
 Every one of them, with its ranges, is on the [Helpers reference](Reference-Helpers.md).

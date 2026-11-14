@@ -17,7 +17,7 @@ const TYPES = join(root, "smart-fellas.d.ts");
 const WIKI = join(root, "wiki");
 const PREFIX = "Reference";
 /** The helpers' names: they go on Reference-Helpers.md, each with its parts listed under it. */
-const HELPERS = new Set(["Vec", "Maths", "Random", "Easing", "Ease", "tween", "State", "StateMachine", "store", "log"]);
+const HELPERS = new Set(["Vec", "Maths", "Random", "Easing", "Ease", "tween", "State", "StateMachine", "Store", "store", "log"]);
 const STAMP = "<!-- Made by tools/reference.mjs from smart-fellas.d.ts. Don't edit: change the types file, then run npm run reference. -->";
 
 /** The doc comment on a node, as plain Markdown text, or "". */
