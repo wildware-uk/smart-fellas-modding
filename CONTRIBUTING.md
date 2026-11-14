@@ -31,4 +31,7 @@ learn it too, so it lands here together with a game release that knows it.
 ## Releases
 
 Add the version's section at the top of `CHANGELOG.md`, then tag it: `git tag v1.2.0 && git push
-origin v1.2.0`. The tag makes the GitHub Release, with the types file attached.
+origin v1.2.0`. The tag makes the GitHub Release, with the types file attached, and publishes the
+types to npm as `@wildware/smart-fellas` at the same version (`package.json`'s own version is only a
+placeholder). A version npm already has is skipped. To put an older release on npm, run the Check
+workflow by hand (Actions > Check > Run workflow) with its tag in **npm_tag**.

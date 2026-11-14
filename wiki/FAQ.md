@@ -5,7 +5,9 @@ No. Plain JavaScript works too: name the file `.js`. TypeScript adds the types, 
 tell you about a mistake before you run the game.
 
 **Do I need Node, npm or a compiler?**
-No. The game reads `.ts` files itself. You only need an editor, and the map maker for maps.
+No. The game reads `.ts` files itself. You only need an editor, and the map maker for maps. If you
+do use npm, the types are a package: `npm install --save-dev @wildware/smart-fellas` (see
+[Getting started](Getting-Started.md)).
 
 **Can my script read files, use the internet or see the player's computer?**
 No. Scripts run in a sealed box with nothing but this API, on every PC. That's what makes it safe to
