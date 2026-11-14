@@ -19,9 +19,9 @@ A script plays the game's own sounds. It can't bring sounds of its own.
 
 - `game.playSound(name)` plays it for everyone, wherever they are.
 - `game.playSoundAt(name, x, y, z)` plays it at a point, heard by whoever is near.
-- `game.playSoundForTeam(team, name)` plays it for one team only, wherever they are (on the host
-  only; new in API 1.1.0).
-- `player.playSound(name)` plays it for one player alone (on the host only; new in API 1.1.0).
+- `game.playSoundForTeam(team, name)` plays it for one team only, wherever they are (new in API
+  1.1.0).
+- `player.playSound(name)` plays it for one player alone (new in API 1.1.0).
 
 A few sounds a second at most; more are dropped. In a `client/` script, a sound is for that player
 alone.

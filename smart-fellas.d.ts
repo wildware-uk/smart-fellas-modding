@@ -329,12 +329,12 @@ interface Player {
    * when a round starts and when the lobby comes back (on the host only).
    */
   setSpeed(share: number): void;
-  /** Plays one of the game's sounds for them alone, wherever they are (on the host only). */
+  /** Plays one of the game's sounds for them alone, wherever they are (in a client/ script, on that player's own screen only). */
   playSound(sound: SoundName): void;
   /**
    * Shows them alone big text in the middle of the screen, as game.announce does for more players:
    * 1 to 60 characters, for 0.5 to 15 seconds (3 if left out). It counts as a message from the map,
-   * with the same limits as game.say (on the host only).
+   * with the same limits as game.say (in a client/ script, on that player's own screen only).
    */
   announce(text: string, seconds?: number): void;
 }
@@ -481,7 +481,7 @@ interface Game {
   sayToTeam(team: Team, text: string): void;
   /** Plays one of the game's sounds for everyone, wherever they are. A few a second at most. */
   playSound(sound: SoundName): void;
-  /** Plays one of the game's sounds for one team only, wherever they are (on the host only). */
+  /** Plays one of the game's sounds for one team only, wherever they are (in a client/ script, on that player's own screen only). */
   playSoundForTeam(team: Team, sound: SoundName): void;
   /** Plays one of the game's sounds at a point, heard by whoever is near. */
   playSoundAt(sound: SoundName, x: number, y: number, z: number): void;
@@ -582,8 +582,8 @@ interface Game {
    * Shows big text in the middle of the screen: 1 to 60 characters, for `seconds` (0.5 to 15, 3 if
    * left out). A new one replaces the one showing. It counts as a message from the map, towards the
    * same limits as game.say: at most 3 a tick and 6 a second for any one player, and a call that
-   * would go over throws. `viewers` is one team or one player; leave it out for everyone (on the
-   * host only).
+   * would go over throws. `viewers` is one team or one player; leave it out for everyone (in a
+   * client/ script, on that player's own screen only).
    */
   announce(text: string, seconds?: number, viewers?: Viewers): void;
   /**
@@ -591,26 +591,29 @@ interface Game {
    * one with this id: `id` is 1 to 16 letters, digits, - or _. At most 8 widgets show on any
    * player's screen: a 9th isn't shown on that screen (no error), and changing or removing those
    * already there always works. They stay until removed, or until the lobby comes back. A call that
-   * changes nothing sends nothing, so it is fine to call it every tick. A "timer" counts down by
-   * itself: asking for it again with the same seconds doesn't restart it; new seconds do.
-   * `viewers` is one team or one player; leave it out for everyone (on the host only).
+   * changes nothing sends nothing, so it is fine to call it every tick; when a script changes a lot
+   * at once, each player is sent a few changes a tick and the latest of each wins. A "timer" counts
+   * down by itself: asking for it again with the same seconds doesn't restart it; new seconds do.
+   * A player who joins later sees what is showing for everyone and for their team. A map's and a
+   * mode's widgets never share an id. `viewers` is one team or one player; leave it out for
+   * everyone (in a client/ script, on that player's own screen only).
    */
   widget(id: string, spec: WidgetSpec, viewers?: Viewers): void;
   /**
-   * Takes the widget with this id off the screens of `viewers`, or everyone's if left out (on the
-   * host only).
+   * Takes the widget with this id off the screens of `viewers`, or everyone's if left out
+   * (in a client/ script, on that player's own screen only).
    */
   removeWidget(id: string, viewers?: Viewers): void;
   /**
    * Shows a marker in the world, or moves or changes the one with this id (ids as for widget). At
    * most 16 show on any player's screen: a 17th isn't shown on that screen (no error), and changing
-   * or removing those already there always works. `viewers` is one team or one player; leave it out
-   * for everyone (on the host only).
+   * or removing those already there always works. Like widgets, it reaches players who join later.
+   * `viewers` is one team or one player; leave it out for everyone (in a client/ script, on that player's own screen only).
    */
   marker(id: string, spec: MarkerSpec, viewers?: Viewers): void;
   /**
-   * Takes the marker with this id off the screens of `viewers`, or everyone's if left out (on the
-   * host only).
+   * Takes the marker with this id off the screens of `viewers`, or everyone's if left out
+   * (in a client/ script, on that player's own screen only).
    */
   removeMarker(id: string, viewers?: Viewers): void;
 

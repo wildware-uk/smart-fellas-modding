@@ -3,8 +3,8 @@
 Three ways to put things on players' screens beyond chat and the banner: big announcements in the
 middle, widgets down the left side, and markers in the world. New in API 1.1.0.
 
-All of them work on the host only. The host's game decides them and sends them to the players they
-are for; a `client/` script's call does nothing.
+The host's game decides them and sends them to the players they are for. A `client/` script may use
+them too, as it may `say`: what it shows is on that player's own screen alone.
 
 ## Who sees it
 
@@ -59,7 +59,10 @@ out).
 - At most 8 widgets show on any player's screen. A 9th isn't shown on that screen, with no error.
   Changing or removing the ones already there always works.
 - They stay until `game.removeWidget(id, viewers?)` takes them off, or the lobby comes back.
-- A call that changes nothing sends nothing, so it is fine to call it every tick.
+- A call that changes nothing sends nothing, so it is fine to call it every tick. When a script
+  changes a lot at once, each player is sent a few changes a tick, and the latest of each wins.
+- A player who joins later sees the widgets and markers showing for everyone and for their team.
+- A map's script and a mode's script never share an id: each has its own widgets and markers.
 - A timer counts down by itself. Asking for it again with the same `seconds` doesn't restart it, so
   calling it every tick is fine; change `seconds` to restart it.
 

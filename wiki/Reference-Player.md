@@ -248,7 +248,7 @@ when a round starts and when the lobby comes back (on the host only).
 playSound(sound: SoundName): void;
 ```
 
-Plays one of the game's sounds for them alone, wherever they are (on the host only).
+Plays one of the game's sounds for them alone, wherever they are (in a client/ script, on that player's own screen only).
 
 ### announce
 
@@ -258,4 +258,4 @@ announce(text: string, seconds?: number): void;
 
 Shows them alone big text in the middle of the screen, as game.announce does for more players:
 1 to 60 characters, for 0.5 to 15 seconds (3 if left out). It counts as a message from the map,
-with the same limits as game.say (on the host only).
+with the same limits as game.say (in a client/ script, on that player's own screen only).

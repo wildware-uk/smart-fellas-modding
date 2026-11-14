@@ -26,14 +26,15 @@ On a player's own PC (a `client/` script), a player that PC wasn't sent has no p
 - `say(text)` and `setLine(text)`: see [Messages and HUD](Messages-and-HUD.md)
 - For game modes: `setTeam`, `setRole`, `setScore`, `addScore`, `setCell`, `bite`, and for bots
   `setGoal` and `removeBot`. See [Game modes](Game-Modes.md).
-- On the host only: `setSpeed(share)`, `playSound(sound)` and `announce(text, seconds?)`. See below.
+- `setSpeed(share)` (on the host only), `playSound(sound)` and `announce(text, seconds?)`. See below.
 
 To find the players near a point, use `game.playersNear` and `game.nearestPlayer`: see
 [Finding things](Finding-Things.md).
 
 ## Speed, sounds and announcements for one player
 
-New in API 1.1.0, and on the host only:
+New in API 1.1.0. `setSpeed` works on the host only; in a `client/` script, `playSound` and
+`announce` are for that player's own screen, as `say` is:
 
 - `setSpeed(share)` sets how fast they swim and crawl, as a share of normal: 0 to 3. 0 holds them
   still (they can still look round and use abilities), 1 is normal. It works for octopuses and
