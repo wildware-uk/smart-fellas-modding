@@ -102,6 +102,10 @@ game.onRoundEnd(() => {
 with that `id`. Players see it through rock, with how far away it is under it.
 
 - `at`: the point, within 1000 m of the map's middle.
+- `on`: or a player, in place of `at` (new in 1.6.0). The marker rides over them as they move. A
+  screen shows it only while that screen is sent the player's body (when they are near enough to
+  see), and not while they have no body. So it marks someone, but never gives away more than that
+  screen already knows.
 - `label`: the text over it, 0 to 24 characters.
 - `colour`: `"#rrggbb"`, white if left out.
 
@@ -122,6 +126,18 @@ every(0.25, () => {
     game.marker("fattest", { at: top.position, label: "Well fed", colour: "#ff4444" }, "diver");
   } else {
     game.removeMarker("fattest", "diver");
+  }
+});
+```
+
+That one is moved from the host, so the divers see it however far off the octopus is. To mark a
+player only where they could be seen anyway, and smoothly, put the marker on them:
+
+```ts
+// Everyone sees who is "it", over their head.
+game.onTeamChange((player, from, to) => {
+  if (to === "octopus") {
+    game.marker("it", { on: player, label: "It!", colour: "#ffcc00" });
   }
 });
 ```

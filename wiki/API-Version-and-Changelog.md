@@ -14,13 +14,19 @@ understands is the one it was built with.
 
 ## What changed
 
-The newest version is **1.5.0**. It adds [Water and lights](Water-and-Lights.md):
+The newest version is **1.6.0**. It adds:
+
+- `game.seabedPoint(random?)`: a random spot on open seabed ([Rays and the ground](Rays-and-Ground.md)).
+- Markers on a player: `game.marker(id, { on: player })` rides over them
+  ([HUD widgets and markers](HUD-Widgets-and-Markers.md#markers)).
+
+Scripts written for 1.0.0 to 1.5.0 work as they did.
+
+Version 1.5.0 added [Water and lights](Water-and-Lights.md):
 
 - `game.setWater(spec, seconds?)` and `game.resetWater(seconds?)`: change the water's colour, how
   far anyone sees and how bright it is, fading in.
 - `game.light(id, spec)` and `game.removeLight(id)`: coloured lights in the world.
-
-Scripts written for 1.0.0 to 1.4.0 work as they did.
 
 Version 1.4.0 added [Menus and votes](Menus-and-Votes.md):
 

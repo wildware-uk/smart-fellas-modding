@@ -2,6 +2,17 @@
 
 What changed in the Smart Fellas scripting API, its examples and its wiki, newest first.
 
+## 1.6.0
+
+Calls added; scripts written for 1.0.0 to 1.5.0 work as they did. Each needs a game that knows API
+1.6.0.
+
+- `game.seabedPoint(random?)` settles with a random spot on open seabed: the first ground facing up
+  under a random spot at the top of the play area, passing under cave roofs and overhangs.
+- Markers on players: `MarkerSpec` takes `on: player` in place of `at`, and the marker rides over
+  them. A screen shows it only while it is sent that player's body.
+- Wiki: examples for both, on Rays and the ground and HUD widgets and markers.
+
 ## 1.5.0
 
 Calls added; scripts written for 1.0.0 to 1.4.0 work as they did. Each needs a game that knows API

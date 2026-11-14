@@ -277,8 +277,15 @@ interface VoteSpec {
 
 /** A marker (game.marker) at a point in the world, seen through rock, with its distance under it. */
 interface MarkerSpec {
-  /** Where it is, within 1000 m of the map's middle. */
-  at: Point;
+  /** Where it is, within 1000 m of the map's middle. Give this or `on`, not both. */
+  at?: Point;
+  /**
+   * The player it rides over, moving with them, in place of `at`. A screen shows it only while that
+   * screen is sent the player's body, as when they are near enough to see, so it never shows anyone
+   * more than their own game knows. Not shown while the player has no body (waiting, respawning, out
+   * or gone). New in 1.6.0.
+   */
+  on?: Player;
   /** The text over it, 0 to 24 characters. */
   label?: string;
   /** Its colour, "#rrggbb" (white if left out). */
@@ -593,6 +600,15 @@ interface Game {
   lineOfSight(a: Point, b: Point): Promise<boolean>;
   /** The ground straight under `point`, down to under the play area's floor; or null if there is none. One ray. */
   groundBelow(point: Point): Promise<RayHit | null>;
+  /**
+   * A random spot on open seabed: straight down from a random spot at the top of the play area, the
+   * first ground facing up (no steeper than about 45 degrees). It passes under rock that faces down,
+   * such as a cave's roof or an overhang, and finds the floor below. If a spot meets only steep rock
+   * or nothing, it tries another, up to 8 spots and 16 rays, one ray a tick; then it settles with
+   * null. `distance` is how far under the top of the play area it is. Spots come from `random` if
+   * given, so the same seed gives the same spots, or from game.random(). New in 1.6.0.
+   */
+  seabedPoint(random?: Random): Promise<RayHit | null>;
 
   /** Shows everyone a message from the map: 1 to 120 characters, a few a second at most. */
   say(text: string): void;

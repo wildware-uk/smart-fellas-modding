@@ -8,6 +8,7 @@ New in API 1.3.0.
 | `game.raycast(from, to)` | where a straight line from `from` to `to` first meets the map, or `null` |
 | `game.lineOfSight(a, b)` | `true` when nothing of the map stands between `a` and `b` |
 | `game.groundBelow(point)` | the ground straight under `point`, or `null` |
+| `game.seabedPoint(random?)` | a random spot on open seabed, or `null` (new in 1.6.0) |
 | `game.playArea` | the box players swim in: `{ min, max }`, its lowest and highest corners (not a promise) |
 
 A hit has `point` (where it met the map), `normal` (which way that surface faces: `y` is 1 on flat
@@ -22,6 +23,10 @@ ground) and `distance` (metres from the start).
   ends must be within 1000 m of the map's middle.
 - `groundBelow` looks down from the point you give, so give it a point in water players can reach:
   from above a cave's roof it finds the roof.
+- `seabedPoint` looks down from a random spot at the top of the play area and takes the first ground
+  that faces up. It passes under cave roofs and overhangs to the floor below, and skips rock too
+  steep to rest on. Each try is one ray, one a tick, up to 8 spots and 16 rays, so it can take a few
+  ticks. Give it a `Random` to get the same spots every time.
 - Every script can use them, `client/` scripts too.
 
 Every call is on the [Game reference](Reference-Game.md).
@@ -70,6 +75,21 @@ game.onRoundStart(async () => {
   const ground = await game.groundBelow(above);
   if (ground) {
     game.marker("goal", { at: ground.point, label: "Goal", colour: "#ffcc00" });
+  }
+});
+```
+
+## Example: treasure scattered over the seabed
+
+```ts
+// Five crabs on random open seabed each round, the same five spots for the same seed.
+game.onRoundStart(async () => {
+  const dice = new Random(42);
+  for (let i = 0; i < 5; i++) {
+    const spot = await game.seabedPoint(dice);
+    if (spot) {
+      game.spawn("crab", spot.point.x, spot.point.y, spot.point.z);
+    }
   }
 });
 ```
