@@ -108,7 +108,8 @@ in its scripts folder for you.
   [Sounds](https://github.com/wildware-uk/smart-fellas-modding/wiki/Sounds),
   [Messages and HUD](https://github.com/wildware-uk/smart-fellas-modding/wiki/Messages-and-HUD),
   [HUD widgets and markers](https://github.com/wildware-uk/smart-fellas-modding/wiki/HUD-Widgets-and-Markers),
-  [Finding things](https://github.com/wildware-uk/smart-fellas-modding/wiki/Finding-Things) and
+  [Finding things](https://github.com/wildware-uk/smart-fellas-modding/wiki/Finding-Things),
+  [Rays and the ground](https://github.com/wildware-uk/smart-fellas-modding/wiki/Rays-and-Ground) and
   [Helpers](https://github.com/wildware-uk/smart-fellas-modding/wiki/Helpers)
 - [Testing and publishing](https://github.com/wildware-uk/smart-fellas-modding/wiki/Testing-and-Publishing),
   [Common mistakes](https://github.com/wildware-uk/smart-fellas-modding/wiki/Common-Mistakes) and the

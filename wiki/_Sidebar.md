@@ -15,6 +15,7 @@
 - [Messages and HUD](Messages-and-HUD.md)
 - [HUD widgets and markers](HUD-Widgets-and-Markers.md)
 - [Finding things](Finding-Things.md)
+- [Rays and the ground](Rays-and-Ground.md)
 - [Helpers](Helpers.md)
 
 **Finish**
