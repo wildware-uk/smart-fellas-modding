@@ -361,13 +361,11 @@ stop(): void;
 
 Stops ticking it, for good.
 
-## store
+## Store
 
-A store of values by name, for this round: it is emptied as each round starts, before your
-onRoundStart runs. Each set of scripts has its own: the map's and the mode's don't share one, and
-each PC's scripts have their own.
+Values kept by name: the round's store, and each player's data.
 
-### store.get
+### Store.get
 
 ```ts
 get<T = unknown>(key: string, fallback?: T): T;
@@ -375,7 +373,7 @@ get<T = unknown>(key: string, fallback?: T): T;
 
 The value kept under `key`, or `fallback` if there is none.
 
-### store.set
+### Store.set
 
 ```ts
 set(key: string, value: unknown): void;
@@ -383,7 +381,7 @@ set(key: string, value: unknown): void;
 
 Keeps `value` under `key`.
 
-### store.add
+### Store.add
 
 ```ts
 add(key: string, by?: number): number;
@@ -391,7 +389,7 @@ add(key: string, by?: number): number;
 
 Adds `by` (1 if left out) to the number kept under `key` (0 if none) and gives back the sum.
 
-### store.has
+### Store.has
 
 ```ts
 has(key: string): boolean;
@@ -399,7 +397,7 @@ has(key: string): boolean;
 
 Whether anything is kept under `key`.
 
-### store.delete
+### Store.delete
 
 ```ts
 delete(key: string): boolean;
@@ -407,7 +405,7 @@ delete(key: string): boolean;
 
 Forgets `key`. Says whether anything was kept under it.
 
-### store.keys
+### Store.keys
 
 ```ts
 keys(): string[];
@@ -415,13 +413,24 @@ keys(): string[];
 
 Every key with something kept under it.
 
-### store.clear
+### Store.clear
 
 ```ts
 clear(): void;
 ```
 
 Forgets everything.
+
+## store
+
+A store of values by name, for this round: it is emptied as each round starts, before your
+onRoundStart runs. Each set of scripts has its own: the map's and the mode's don't share one, and
+each PC's scripts have their own. For values about one player that last the match, use
+player.data.
+
+```ts
+declare const store: Store;
+```
 
 ## log
 

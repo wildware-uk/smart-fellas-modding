@@ -14,7 +14,15 @@ understands is the one it was built with.
 
 ## What changed
 
-The newest version is **1.1.0**. It adds:
+The newest version is **1.2.0**. It adds, for one player ([Players](Players.md)):
+
+- `player.allow(skill, allowed)` and `player.allowed(skill)`: switch their dash, ink, grab, smell
+  or gun off, and back on.
+- `player.data`: a store of values of their own, kept for the whole match.
+
+Scripts written for 1.0.0 and 1.1.0 work as they did.
+
+Version 1.1.0 added:
 
 - [Helpers](Helpers.md) every script has: `Vec`, `Maths`, `Random`, `Ease`, `tween`, `StateMachine`,
   `store` and `log`.
@@ -26,8 +34,6 @@ The newest version is **1.1.0**. It adds:
   ([Players](Players.md)).
 - `game.playSoundForTeam` ([Sounds](Sounds.md)).
 - The events `game.onDash`, `game.onInk`, `game.onGrab` and `game.onShoot` ([Events](Events.md)).
-
-Scripts written for 1.0.0 work as they did.
 
 [CHANGELOG.md](https://github.com/wildware-uk/smart-fellas-modding/blob/main/CHANGELOG.md) says what
 changed in each version, newest first.

@@ -105,6 +105,16 @@ readonly speed: number | null;
 Their speed as a share of normal: 1 is normal, 0 held still; null once gone. On the host it is
 what scripts set; on a player's PC it is what that PC was sent for them (1 if nothing).
 
+### data
+
+```ts
+readonly data: Store;
+```
+
+A store of values of their own, kept from round to round for the whole match. It is let go at
+the first round start after they leave, so onLeave can still read it. Each set of scripts has
+its own, as with store.
+
 ## What you can call
 
 ### moveTo
@@ -259,3 +269,25 @@ announce(text: string, seconds?: number): void;
 Shows them alone big text in the middle of the screen, as game.announce does for more players:
 1 to 60 characters, for 0.5 to 15 seconds (3 if left out). It counts as a message from the map,
 with the same limits as game.say (in a client/ script, on that player's own screen only).
+
+### allow
+
+```ts
+allow(skill: Skill, allowed: boolean): void;
+```
+
+Switches one of their skills off, or on again with true. A skill switched off does nothing when
+they press it: a press plays a soft "no", and an octopus's button for it shows faint. Switching
+grab off lets go of whatever they hold, and stops a grab on its way. Ink or a shot already on
+its way finishes. It stays until changed, through deaths and respawns, and every skill comes
+back as a round starts and when the lobby comes back, so switch them off in onRoundStart (on
+the host only).
+
+### allowed
+
+```ts
+allowed(skill: Skill): boolean | null;
+```
+
+Whether a skill works for them (true unless a script switched it off); null once gone. On a
+player's PC it is what that PC was sent for them.

@@ -8,7 +8,7 @@ Every call a script can make, straight from `smart-fellas.d.ts`. These pages are
 
 - `game`: The match. See [Game](Reference-Game.md).
 - `after`, `every`, `cancel`: see [Timers](Reference-Timers.md).
-- `Vec`, `Maths`, `Random`, `Easing`, `Ease`, `tween`, `State`, `StateMachine`, `store`, `log`: see [Helpers](Reference-Helpers.md).
+- `Vec`, `Maths`, `Random`, `Easing`, `Ease`, `tween`, `State`, `StateMachine`, `Store`, `store`, `log`: see [Helpers](Reference-Helpers.md).
 
 ## Pages
 

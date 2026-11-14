@@ -2,6 +2,17 @@
 
 What changed in the Smart Fellas scripting API, its examples and its wiki, newest first.
 
+## 1.2.0
+
+Calls added; scripts written for 1.0.0 and 1.1.0 work as they did. Each needs a game that knows API
+1.2.0.
+
+- `player.allow(skill, allowed)` switches one player's dash, ink, grab, smell or gun off, or back
+  on, until the round ends; `player.allowed(skill)` reads it back. A new type, `Skill`, names them.
+- `player.data`: a store of values for one player, kept from round to round for the whole match.
+  The store's calls now have a type of their own, `Store`.
+- Wiki: the Players page explains both, with examples.
+
 ## 1.1.0
 
 Calls added; scripts written for 1.0.0 work as they did. Each needs a game that knows API 1.1.0.
