@@ -4,7 +4,9 @@
 # and publishes the types to npm as @wildware/smart-fellas, at the tag's version.
 #
 # A release from before npm can be published by running this workflow by hand with its tag: it packs
-# that tag's types file. A version npm already has is left as it is.
+# that tag's types file, with main's README, changelog and package.json, and its provenance names
+# main's commit. A version npm already has is left as it is. A pre-release tag (v1.2.0-beta.1) goes
+# to npm's "next" channel, so a plain install still gets the newest full release.
 #
 # It runs once a day too, so the wiki fills by itself once its first page exists.
 name: Check
@@ -96,6 +98,10 @@ jobs:
           esac
           git checkout "refs/tags/$TAG" -- smart-fellas.d.ts
           npm pkg set "version=${TAG#v}"
+          case "$TAG" in
+            *-*) echo "CHANNEL=next" >>"$GITHUB_ENV" ;;
+            *) echo "CHANNEL=latest" >>"$GITHUB_ENV" ;;
+          esac
       - name: Publish, unless npm already has this version
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -106,7 +112,7 @@ jobs:
             echo "npm already has $name $version: nothing to do."
             exit 0
           fi
-          if ! npm publish --provenance --access public; then
+          if ! npm publish --provenance --access public --tag "$CHANNEL"; then
             # Another run may have published it a moment ago: that's not a failure.
             sleep 20
             npm view "$name@$version" version >/dev/null 2>&1 || exit 1
