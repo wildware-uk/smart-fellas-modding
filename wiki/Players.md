@@ -98,8 +98,9 @@ game.onRoundStart(() => {
 New in API 1.8.0, on the host only. `setInvisible(true)` hides a player from everyone else, and
 `setInvisible(false)` shows them again.
 
-- No other player's PC is sent their body, as if they were far away. So nobody else sees them,
-  their name or a marker on them, and a changed game on someone's PC can't find them either.
+- No other player's PC is sent their body (or the creature they drive on a mode's team), as if
+  they were far away. So nobody else sees or hears them, or sees their name, chat bubble or a
+  marker on them, and a changed game on someone's PC can't find them either.
 - They still see themselves and everyone else.
 - They stay solid, and the game's bots still sense them.
 - It stays through deaths and respawns, and everyone is seen again as a round starts and when the

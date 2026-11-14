@@ -288,8 +288,9 @@ setInvisible(invisible: boolean): void;
 ```
 
 Makes them invisible to everyone else, or seen again with false. No other player's PC is sent
-their body, so nobody else sees them, their name or a marker on them, as if they were far
-off; they still see themselves and everyone else. They stay solid, and the game's bots still
+their body (or the creature they drive on a mode's team), so nobody else sees or hears them, or
+sees their name, chat bubble or a marker on them, as if they were far off; they still see
+themselves and everyone else. They stay solid, and the game's bots still
 sense them. It stays until changed, through deaths and respawns, and
 goes back to seen when a round starts and when the lobby comes back (on the host only). New in
 1.8.0.
