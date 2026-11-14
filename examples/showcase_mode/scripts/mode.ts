@@ -69,13 +69,15 @@ function inPlayArea(at: Point): Point {
 }
 
 // The next spot: a food item at least 15 m across the map from the hill now, or else where some
-// player is. It looks at a few items picked at random, not at every one: reading the position of
-// hundreds of items in one tick costs a lot.
+// player is. It asks for the food nearest a few random points: listing every food item on a busy
+// map and reading where each is would take a big share of a tick's work.
+const FOOD: readonly CreatureKind[] = ["crab", "clam", "shrimp"];
 function nextSpot(): Point {
   const far = (at: Point) => Vec.distance(Vec.flat(at), Vec.flat(hill)) > 15;
-  const food = game.creatures("crab").concat(game.creatures("clam"), game.creatures("shrimp"));
+  const { min, max } = game.playArea;
   for (let tries = 0; tries < 8; tries++) {
-    const at = random.pick(food)?.position;
+    const guess = Vec.of(random.range(min.x, max.x), hill.y, random.range(min.z, max.z));
+    const at = game.nearestCreature(guess, random.pick(FOOD))?.position;
     if (at && far(at)) {
       return inPlayArea(at);
     }

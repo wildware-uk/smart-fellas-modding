@@ -79,6 +79,22 @@ script gets a fixed amount of work and memory.
 Work is counted in steps, not time, so a slow PC and a fast one stop the same script at the same
 point. A typical map script uses about a third of its work each tick.
 
+**What things cost, roughly.** Measured with 11 players and 400 food items on the map, as a share of
+one tick's work:
+
+| Work | Share of a tick |
+| --- | --- |
+| The script's tick with nothing to do | 3% |
+| A call that changes something: a light, a marker, a widget, a ray | about 1% each |
+| `game.players()`, or one `game.playersNear` | about 1% |
+| One `Vec` or `Maths` helper call | about 0.5% |
+| `game.creatures()` of every food kind on that map | about 35% |
+
+So 16 rays, 8 lights, 8 markers and a query for each of 11 players, every tick, fit in about half a
+tick. A loop of 200 `Vec` calls every tick doesn't. Do big jobs less often (`every(0.25, ...)`), or
+spread them over ticks, and use the finders (`game.nearestCreature`, `game.creaturesNear`) rather
+than listing everything.
+
 **A script that breaks is switched off** for the rest of the match: one that runs too long, uses too
 much memory, or throws an error it doesn't catch. The host sees one line saying why (for a client
 script, that player does). The match plays on as if the map had no script. A mode whose script stops

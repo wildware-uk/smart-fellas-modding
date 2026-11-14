@@ -19,7 +19,7 @@ when time runs out, the top scorer does. Round wins add up over the match on the
 | `game.vote` | the players' pick of a big or a small hill, as each round starts |
 | `tween`, `Ease`, `Vec`, `Maths` | gliding the hill to its next spot, keeping it in the play area, its light's strength |
 | `Random` | picking the next spot, and where shrimp grow |
-| `game.creatures`, `game.creaturesNear`, `game.spawn` | finding food spots for the hill, and growing shrimp by it |
+| `game.nearestCreature`, `game.creaturesNear`, `game.spawn` | finding food spots for the hill, and growing shrimp by it |
 | `game.playArea`, `game.groundBelow` | keeping the hill inside the map, and settling it on the ground |
 | `store` | each player's points, dashes and inks this round, emptied each round by itself |
 | `player.data` | each player's round wins, kept for the whole match |
