@@ -42,6 +42,23 @@ game.onShoot(async (diver) => {
 });
 ```
 
+## Example: a beam that stops at rock
+
+```ts
+// A lever lights a beam from the lighthouse out to sea: a light at the end of a 40 m ray, or where
+// it first meets rock. The hit's normal faces away from the rock, so the light sits just off it.
+const LAMP = Vec.of(0, 5, 0);
+const AHEAD = Vec.of(40, -5, 0);
+
+game.piece("lever")?.onUse(async () => {
+  const to = Vec.add(LAMP, AHEAD);
+  const hit = await game.raycast(LAMP, to);
+  const end = hit ? Vec.add(hit.point, Vec.scale(hit.normal, 1)) : to;
+  log("beam ends", hit ? `on rock ${hit.distance.toFixed(1)} m out` : "in open water");
+  game.light("beam", { at: end, colour: "#fff2b3", strength: 4, range: 12 });
+});
+```
+
 ## Example: a lookout that needs a clear view
 
 ```ts
