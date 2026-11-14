@@ -2,6 +2,16 @@
 
 What changed in the Smart Fellas scripting API, its examples and its wiki, newest first.
 
+## 1.8.1
+
+No new calls: examples and the wiki only.
+
+- The showcase mode, King of the Reef, now shows calls from 1.2.0 to 1.8.0 too: a vote for the
+  hill, a light over it, a crown marker riding on the leader, who can't ink, a leading bot playing
+  easy, the last player hidden while the hill moves, the hill settling on the ground with a ray, the
+  water darkening at the end, and round wins kept in `player.data`.
+- Wiki: an overtime example on Game modes, and a `game.raycast` example on Rays and the ground.
+
 ## 1.8.0
 
 Calls added; scripts written for 1.0.0 to 1.7.0 work as they did. Each needs a game that knows API
