@@ -7,11 +7,13 @@ What changed in the Smart Fellas scripting API, its examples and its wiki, newes
 Calls added; scripts written for 1.0.0 to 1.5.0 work as they did. Each needs a game that knows API
 1.6.0.
 
-- `game.seabedPoint(random?)` settles with a random spot on open seabed: the first ground facing up
-  under a random spot at the top of the play area, passing under cave roofs and overhangs.
 - Markers on players: `MarkerSpec` takes `on: player` in place of `at`, and the marker rides over
   them. A screen shows it only while it is sent that player's body.
-- Wiki: examples for both, on Rays and the ground and HUD widgets and markers.
+- The objects a call takes (a marker's, a widget's, a menu's, the water's, a light's, a team's, an
+  ability's, and points) are read for the values they hold themselves. A value that comes from a
+  getter, from the object's prototype or through a `Proxy` reads as left out, and a script's own code
+  never runs inside a call. Object literals and `Vec` points work as before.
+- Wiki: an example on HUD widgets and markers.
 
 ## 1.5.0
 

@@ -14,13 +14,12 @@ understands is the one it was built with.
 
 ## What changed
 
-The newest version is **1.6.0**. It adds:
+The newest version is **1.6.0**. It adds markers on a player: `game.marker(id, { on: player })`
+rides over them ([HUD widgets and markers](HUD-Widgets-and-Markers.md#markers)).
 
-- `game.seabedPoint(random?)`: a random spot on open seabed ([Rays and the ground](Rays-and-Ground.md)).
-- Markers on a player: `game.marker(id, { on: player })` rides over them
-  ([HUD widgets and markers](HUD-Widgets-and-Markers.md#markers)).
-
-Scripts written for 1.0.0 to 1.5.0 work as they did.
+Calls now read only the values an object holds itself: a getter, a value from its prototype or a
+`Proxy` reads as left out. Object literals and `Vec` points work as before, and so do scripts written
+for 1.0.0 to 1.5.0 that pass them.
 
 Version 1.5.0 added [Water and lights](Water-and-Lights.md):
 

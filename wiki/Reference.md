@@ -66,3 +66,6 @@ The calls marked "for game modes" change the round's rules. A map's script may u
 the mode then hears what happened through its own events (onTeamChange, onRoundEnd).
 The calls marked "on the host only" work only in the host's game: a client/ script's call does
 nothing. The host's game decides them and sends them to the players they are for.
+An object a call takes (a spec, a point) is read for the values it holds itself, as an object
+literal or a Vec point does: a value from a getter, from its prototype or through a Proxy reads as
+left out, so none of the script's own code runs inside a call.

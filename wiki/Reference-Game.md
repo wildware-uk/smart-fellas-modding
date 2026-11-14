@@ -205,19 +205,6 @@ groundBelow(point: Point): Promise<RayHit | null>;
 
 The ground straight under `point`, down to under the play area's floor; or null if there is none. One ray.
 
-### seabedPoint
-
-```ts
-seabedPoint(random?: Random): Promise<RayHit | null>;
-```
-
-A random spot on open seabed: straight down from a random spot at the top of the play area, the
-first ground facing up (no steeper than about 45 degrees). It passes under rock that faces down,
-such as a cave's roof or an overhang, and finds the floor below. If a spot meets only steep rock
-or nothing, it tries another, up to 8 spots and 16 rays, one ray a tick; then it settles with
-null. `distance` is how far under the top of the play area it is. Spots come from `random` if
-given, so the same seed gives the same spots, or from game.random(). New in 1.6.0.
-
 ### say
 
 ```ts
