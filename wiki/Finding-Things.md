@@ -66,3 +66,11 @@ game.onShoot((diver) => {
   }
 });
 ```
+
+## Keep it light on a busy map
+
+A map can hold hundreds of food items. The finders work out distances inside the game, so one call
+costs about the same however many there are. Going through `game.creatures()` yourself and reading
+each one's `position` costs a little for every item: on a map with several hundred, doing that
+every tick can use up the tick's steps, and the game switches the script off. Use the finders
+instead, or look at a few items picked at random.

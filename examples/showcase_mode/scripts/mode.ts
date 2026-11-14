@@ -31,18 +31,23 @@ let random = new Random(1);
 let leader: Player | null = null;
 let glide: TimerId | null = null;
 
-// The next spot: a food spot at least 15 m across the map from the hill now, or else where some
-// player is.
+// The next spot: a food item at least 15 m across the map from the hill now, or else where some
+// player is. It looks at a few items picked at random, not at every one: reading the position of
+// hundreds of items in one tick costs a lot.
 function nextSpot(): Point {
   const far = (at: Point) => Vec.distance(Vec.flat(at), Vec.flat(hill)) > 15;
-  const food = [...game.creatures("crab"), ...game.creatures("clam"), ...game.creatures("shrimp")]
-    .map((creature) => creature.position)
-    .filter((at): at is Point => at !== null && far(at));
+  const food = game.creatures("crab").concat(game.creatures("clam"), game.creatures("shrimp"));
+  for (let tries = 0; tries < 8; tries++) {
+    const at = random.pick(food)?.position;
+    if (at && far(at)) {
+      return at;
+    }
+  }
   const players = game
     .players()
     .map((player) => player.position)
     .filter((at): at is Point => at !== null);
-  return random.pick(food) ?? random.pick(players) ?? hill;
+  return random.pick(players) ?? hill;
 }
 
 function showHill(colour: string): void {
