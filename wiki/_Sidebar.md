@@ -17,6 +17,7 @@
 - [Finding things](Finding-Things.md)
 - [Rays and the ground](Rays-and-Ground.md)
 - [Menus and votes](Menus-and-Votes.md)
+- [Water and lights](Water-and-Lights.md)
 - [Helpers](Helpers.md)
 
 **Finish**

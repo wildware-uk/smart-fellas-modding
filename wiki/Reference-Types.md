@@ -294,3 +294,28 @@ interface MarkerSpec {
 ```
 
 A marker (game.marker) at a point in the world, seen through rock, with its distance under it.
+
+## WaterSpec
+
+```ts
+interface WaterSpec {
+  colour?: string;
+  visibility?: number;
+  light?: number;
+}
+```
+
+The water as game.setWater changes it. Anything left out stays as the map has it.
+
+## LightSpec
+
+```ts
+interface LightSpec {
+  at: Point;
+  colour?: string;
+  strength?: number;
+  range?: number;
+}
+```
+
+A light (game.light) at a point in the world, lighting what is near it.

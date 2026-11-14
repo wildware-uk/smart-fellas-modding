@@ -2,6 +2,18 @@
 
 What changed in the Smart Fellas scripting API, its examples and its wiki, newest first.
 
+## 1.5.0
+
+Calls added; scripts written for 1.0.0 to 1.4.0 work as they did. Each needs a game that knows API
+1.5.0.
+
+- The water: `game.setWater(spec, seconds?)` changes its colour, how far anyone sees through it and
+  how bright it is, fading in over the seconds given (a new type, `WaterSpec`);
+  `game.resetWater(seconds?)` gives back the map's own.
+- Lights: `game.light(id, spec)` puts up a coloured light in the world, or moves or changes it (a
+  new type, `LightSpec`); `game.removeLight(id)` takes it down. At most 16 at once.
+- Wiki: a new page, Water and lights, with examples.
+
 ## 1.4.0
 
 Calls added; scripts written for 1.0.0 to 1.3.0 work as they did. Each needs a game that knows API

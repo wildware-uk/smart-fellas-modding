@@ -14,15 +14,21 @@ understands is the one it was built with.
 
 ## What changed
 
-The newest version is **1.4.0**. It adds [Menus and votes](Menus-and-Votes.md):
+The newest version is **1.5.0**. It adds [Water and lights](Water-and-Lights.md):
+
+- `game.setWater(spec, seconds?)` and `game.resetWater(seconds?)`: change the water's colour, how
+  far anyone sees and how bright it is, fading in.
+- `game.light(id, spec)` and `game.removeLight(id)`: coloured lights in the world.
+
+Scripts written for 1.0.0 to 1.4.0 work as they did.
+
+Version 1.4.0 added [Menus and votes](Menus-and-Votes.md):
 
 - `game.menu(id, spec, viewers?)` and `game.removeMenu(id, viewers?)`: a card of 2 to 5 choices
   players pick with the number keys.
 - `game.onChoose(handler)`: hears each pick.
 - `game.vote(spec, viewers?)`: asks a question and settles with the winner and the counts.
 - `game.endRound(winner, why?, text?)`: your own line on the results.
-
-Scripts written for 1.0.0 to 1.3.0 work as they did.
 
 Version 1.3.0 added [Rays and the ground](Rays-and-Ground.md):
 
