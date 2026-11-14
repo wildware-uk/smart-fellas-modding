@@ -2,6 +2,15 @@
 
 What changed in the Smart Fellas scripting API, its examples and its wiki, newest first.
 
+## 1.8.0
+
+Calls added; scripts written for 1.0.0 to 1.7.0 work as they did. Each needs a game that knows API
+1.8.0.
+
+- Invisible players: `player.setInvisible(true)` hides a player from everyone else (no other PC is
+  sent their body), and `player.invisible` reads it on the host.
+- Wiki: an example on Players.
+
 ## 1.7.0
 
 Calls added; scripts written for 1.0.0 to 1.6.0 work as they did. Each needs a game that knows API

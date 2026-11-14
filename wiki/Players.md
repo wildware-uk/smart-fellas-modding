@@ -17,6 +17,7 @@ same object, so `===` works, and you can keep one in a variable or a `Map`.
 | `score`, `role` | what your scripts set this round |
 | `speed` | their speed as a share of normal: 1 is normal, 0 is held still. On a player's PC, what it was sent (1 if nothing) |
 | `allowed(skill)` | whether a skill works for them: `true` unless a script switched it off |
+| `invisible` | whether a script made them invisible, on the host; `null` on a player's PC |
 | `data` | a store of values of their own, kept for the whole match |
 | `gone` | whether they have left. Then `team`, `life`, `position` and `energy` read as `null` |
 
@@ -30,6 +31,8 @@ On a player's own PC (a `client/` script), a player that PC wasn't sent has no p
   `setGoal`, `setBotLevel` and `removeBot`. See [Game modes](Game-Modes.md).
 - `setSpeed(share)` (on the host only), `playSound(sound)` and `announce(text, seconds?)`. See below.
 - `allow(skill, allowed)` (on the host only): switch one of their skills off or on. See below.
+- `setInvisible(invisible)` (on the host only): hide them from everyone else, or show them again.
+  See below.
 
 To find the players near a point, use `game.playersNear` and `game.nearestPlayer`: see
 [Finding things](Finding-Things.md).
@@ -87,6 +90,34 @@ game.onRoundStart(() => {
       player.allow("smell", false);
     }
   }
+});
+```
+
+## Invisible players
+
+New in API 1.8.0, on the host only. `setInvisible(true)` hides a player from everyone else, and
+`setInvisible(false)` shows them again.
+
+- No other player's PC is sent their body (or the creature they drive on a mode's team), as if
+  they were far away. So nobody else sees or hears them, or sees their name, chat bubble or a
+  marker on them, and a changed game on someone's PC can't find them either.
+- They still see themselves and everyone else.
+- They stay solid, and the game's bots still sense them.
+- It stays through deaths and respawns, and everyone is seen again as a round starts and when the
+  lobby comes back. Make players invisible in `onRoundStart`.
+- `invisible` reads it back on the host. On a player's PC it is `null`: that PC isn't told.
+
+```ts
+// The hunter is invisible for the first 30 seconds of each round, then everyone sees them.
+game.onRoundStart(() => {
+  const hunter = game.players().find((player) => player.team === "diver");
+  if (!hunter) return;
+  hunter.setInvisible(true);
+  hunter.setLine("You are invisible for 30 seconds");
+  after(30, () => {
+    hunter.setInvisible(false);
+    hunter.setLine("");
+  });
 });
 ```
 

@@ -14,8 +14,11 @@ understands is the one it was built with.
 
 ## What changed
 
-The newest version is **1.7.0**. It adds bot levels: `player.setBotLevel(level)` makes one bot play
-`"easy"`, `"normal"` or `"hard"`, and `player.botLevel` reads it ([Game modes](Game-Modes.md#bots)).
+The newest version is **1.8.0**. It adds invisible players: `player.setInvisible(true)` hides a
+player from everyone else, and `player.invisible` reads it ([Players](Players.md#invisible-players)).
+
+Version 1.7.0 added bot levels: `player.setBotLevel(level)` makes one bot play `"easy"`, `"normal"`
+or `"hard"`, and `player.botLevel` reads it ([Game modes](Game-Modes.md#bots)).
 
 Version 1.6.0 added markers on a player: `game.marker(id, { on: player })` rides over them
 ([HUD widgets and markers](HUD-Widgets-and-Markers.md#markers)). Calls since then read only the
