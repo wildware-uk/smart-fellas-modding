@@ -57,6 +57,7 @@ let random = new Random(1);
 let leader: Player | null = null;
 let ghost: Player | null = null;
 let glide: TimerId | null = null;
+let votes = 0; // counts votes, so a late answer from an old round is let go
 
 // Keeps a point inside the box players swim in, 5 m from its walls.
 function inPlayArea(at: Point): Point {
@@ -179,15 +180,18 @@ const phases: StateMachine<HillPhase> = new StateMachine<HillPhase>(
         showHill(WHITE);
         game.announce("King of the Reef", 3);
         game.widget("phase", { kind: "timer", label: "Vote ends in", seconds: VOTE_SECONDS });
-        // Bots never answer, so a round of bots alone gets the first choice.
+        // Bots never answer, so a round of bots alone gets the first choice. A vote still open when
+        // the round ends closes by itself when its time is up, and its answer is let go.
+        const vote = ++votes;
         game
           .vote({ title: "Which hill?", choices: SIZES.map((hill) => hill.name), seconds: VOTE_SECONDS })
           .then((result) => {
+            if (vote !== votes || phases.state !== "vote") {
+              return;
+            }
             size = SIZES[result.index ?? 0];
             log("vote", result.counts, "picked", size.name);
-            if (phases.state === "vote") {
-              phases.go("hold");
-            }
+            phases.go("hold");
           });
       },
     },
