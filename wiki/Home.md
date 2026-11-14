@@ -28,6 +28,7 @@ Each page has a whole script you can copy and run.
 - [HUD widgets and markers](HUD-Widgets-and-Markers.md): big announcements, bars, counters,
   countdowns and markers in the world.
 - [Finding things](Finding-Things.md): the players and creatures near a point.
+- [Rays and the ground](Rays-and-Ground.md): what stands in the way, and points on the seabed.
 - [Helpers](Helpers.md): maths on points, seeded random numbers, smooth movement, phases, a store
   for the round, and a log.
 

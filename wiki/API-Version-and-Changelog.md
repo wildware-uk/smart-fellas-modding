@@ -14,13 +14,19 @@ understands is the one it was built with.
 
 ## What changed
 
-The newest version is **1.2.0**. It adds, for one player ([Players](Players.md)):
+The newest version is **1.3.0**. It adds [Rays and the ground](Rays-and-Ground.md):
+
+- `game.raycast(from, to)`: where a straight line first meets the map.
+- `game.lineOfSight(a, b)`, `game.groundBelow(point)` and `game.randomGroundPoint()`.
+- `game.playArea`: the box players swim in.
+
+Scripts written for 1.0.0 to 1.2.0 work as they did.
+
+Version 1.2.0 added, for one player ([Players](Players.md)):
 
 - `player.allow(skill, allowed)` and `player.allowed(skill)`: switch their dash, ink, grab, smell
   or gun off, and back on.
 - `player.data`: a store of values of their own, kept for the whole match.
-
-Scripts written for 1.0.0 and 1.1.0 work as they did.
 
 Version 1.1.0 added:
 

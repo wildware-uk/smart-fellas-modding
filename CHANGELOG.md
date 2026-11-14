@@ -2,6 +2,17 @@
 
 What changed in the Smart Fellas scripting API, its examples and its wiki, newest first.
 
+## 1.3.0
+
+Calls added; scripts written for 1.0.0 to 1.2.0 work as they did. Each needs a game that knows API
+1.3.0.
+
+- Rays through the map: `game.raycast(from, to)` settles with where a straight line first meets the
+  map's rock, sand or pieces (a new type, `RayHit`), or null. Players and creatures are let through.
+- Built on it: `game.lineOfSight(a, b)`, `game.groundBelow(point)` and `game.randomGroundPoint()`.
+- `game.playArea`: the box players swim in (a new type, `PlayArea`).
+- Wiki: a new page, Rays and the ground, with examples.
+
 ## 1.2.0
 
 Calls added; scripts written for 1.0.0 and 1.1.0 work as they did. Each needs a game that knows API

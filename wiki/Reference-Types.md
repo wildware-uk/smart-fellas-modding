@@ -16,6 +16,29 @@ interface Point {
 
 A point in the map, in metres. y is up.
 
+## RayHit
+
+```ts
+interface RayHit {
+  readonly point: Point;
+  readonly normal: Point;
+  readonly distance: number;
+}
+```
+
+Where a ray first met the map: from `game.raycast` and `game.groundBelow`.
+
+## PlayArea
+
+```ts
+interface PlayArea {
+  readonly min: Point;
+  readonly max: Point;
+}
+```
+
+The box players swim in, from its lowest corner to its highest.
+
 ## Team
 
 ```ts

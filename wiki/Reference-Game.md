@@ -38,6 +38,14 @@ readonly timeLeft: number;
 
 How long the round has left, in seconds.
 
+### playArea
+
+```ts
+readonly playArea: PlayArea;
+```
+
+The box players swim in. Fixed for the match.
+
 ## What you can call
 
 ### players
@@ -167,6 +175,45 @@ nearestCreature(point: Point, kind?: CreatureKind): Creature | null;
 ```
 
 The nearest living creature or food, of `kind` if given; or null if there is none.
+
+### raycast
+
+```ts
+raycast(from: Point, to: Point): Promise<RayHit | null>;
+```
+
+Casts a ray from `from` to `to` through the map and settles with where it first met the map's
+rock, sand or pieces, or null if nothing is in the way. It meets only the map: players,
+creatures, plants and the play area's edge are let through. The answer comes on the next tick
+(a sixty-fourth of a second), so `await` it. Both ends must be within 1000 m of the map's
+middle. At most 32 rays a tick; asking for more throws. Every script can use it.
+
+### lineOfSight
+
+```ts
+lineOfSight(a: Point, b: Point): Promise<boolean>;
+```
+
+Whether nothing of the map stands between `a` and `b`: true when a ray between them meets nothing. One ray.
+
+### groundBelow
+
+```ts
+groundBelow(point: Point): Promise<RayHit | null>;
+```
+
+The ground straight under `point`, down to under the play area's floor; or null if there is none. One ray.
+
+### randomGroundPoint
+
+```ts
+randomGroundPoint(): Promise<Point | null>;
+```
+
+A point on the ground somewhere in the play area, picked with `game.random()`, so the same
+seed gives the same spot. It looks straight down from the play area's ceiling at 6 random spots
+and gives the first that meets ground in open water, skipping any under solid rock; or null if
+none do. Six rays.
 
 ### say
 
