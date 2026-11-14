@@ -27,7 +27,7 @@ On a player's own PC (a `client/` script), a player that PC wasn't sent has no p
 - `moveTo(x, y, z)`, `kill()`, `addEnergy(points)`, `respawn(x?, y?, z?)`
 - `say(text)` and `setLine(text)`: see [Messages and HUD](Messages-and-HUD.md)
 - For game modes: `setTeam`, `setRole`, `setScore`, `addScore`, `setCell`, `bite`, and for bots
-  `setGoal` and `removeBot`. See [Game modes](Game-Modes.md).
+  `setGoal`, `setBotLevel` and `removeBot`. See [Game modes](Game-Modes.md).
 - `setSpeed(share)` (on the host only), `playSound(sound)` and `announce(text, seconds?)`. See below.
 - `allow(skill, allowed)` (on the host only): switch one of their skills off or on. See below.
 
