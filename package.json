@@ -1,10 +1,22 @@
 {
-  "name": "smart-fellas-modding",
-  "private": true,
-  "description": "The scripting API for Smart Fellas maps and game modes: types, examples and the wiki's checks.",
+  "name": "@wildware/smart-fellas",
+  "version": "0.0.0-development",
+  "description": "TypeScript types for Smart Fellas map scripts and game modes: every call a script can make, with what it does.",
   "license": "MIT",
+  "author": "Wildware Studios (https://wildwarestudios.com)",
+  "homepage": "https://github.com/wildware-uk/smart-fellas-modding/wiki",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wildware-uk/smart-fellas-modding.git"
+  },
+  "bugs": "https://github.com/wildware-uk/smart-fellas-modding/issues",
+  "keywords": ["smart-fellas", "modding", "typescript", "types", "game-mode", "steam-workshop"],
   "type": "module",
   "types": "smart-fellas.d.ts",
+  "files": ["smart-fellas.d.ts", "CHANGELOG.md"],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "check": "node tools/check.mjs",
     "reference": "node tools/reference.mjs"

@@ -1,6 +1,10 @@
 # Checks every example against the types on every change, copies wiki/ into the wiki from main, and
-# makes a GitHub Release for each version's tag, with the types file attached:
+# for each version's tag makes a GitHub Release, with the types file attached:
 # https://github.com/wildware-uk/smart-fellas-modding/releases/latest/download/smart-fellas.d.ts
+# and publishes the types to npm as @wildware/smart-fellas, at the tag's version.
+#
+# A release from before npm can be published by running this workflow by hand with its tag: it packs
+# that tag's types file. A version npm already has is left as it is.
 #
 # It runs once a day too, so the wiki fills by itself once its first page exists.
 name: Check
@@ -11,6 +15,11 @@ on:
     tags: ["v*"]
   pull_request:
   workflow_dispatch:
+    inputs:
+      npm_tag:
+        description: "A release tag to publish to npm (such as v1.0.0). Leave empty to only run the checks."
+        required: false
+        default: ""
   schedule:
     - cron: "17 4 * * *"
 
@@ -60,3 +69,48 @@ jobs:
         run: |
           gh release create "$GITHUB_REF_NAME" smart-fellas.d.ts \
             --title "Smart Fellas modding ${GITHUB_REF_NAME#v}" --notes-file notes.md --latest
+
+  npm:
+    needs: check
+    if: startsWith(github.ref, 'refs/tags/v') || inputs.npm_tag != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      TAG: ${{ inputs.npm_tag || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - name: Take the types file and version from the tag
+        run: |
+          case "$TAG" in
+            v[0-9]*.[0-9]*.[0-9]*) ;;
+            *) echo "\"$TAG\" isn't a version tag such as v1.2.0." >&2; exit 1 ;;
+          esac
+          git checkout "refs/tags/$TAG" -- smart-fellas.d.ts
+          npm pkg set "version=${TAG#v}"
+      - name: Publish, unless npm already has this version
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          name=$(npm pkg get name | tr -d '"')
+          version=${TAG#v}
+          if npm view "$name@$version" version >/dev/null 2>&1; then
+            echo "npm already has $name $version: nothing to do."
+            exit 0
+          fi
+          if ! npm publish --provenance --access public; then
+            # Another run may have published it a moment ago: that's not a failure.
+            sleep 20
+            npm view "$name@$version" version >/dev/null 2>&1 || exit 1
+            echo "npm has $name $version now, from another run."
+            exit 0
+          fi
+          echo "Published https://www.npmjs.com/package/$name/v/$version"

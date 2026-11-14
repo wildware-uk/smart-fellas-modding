@@ -25,6 +25,10 @@ changed in each version, newest first.
 - **Modes:** copy `smart-fellas.d.ts` from here into your mode's `scripts/` folder again. Or download
   it straight from the newest release:
   <https://github.com/wildware-uk/smart-fellas-modding/releases/latest/download/smart-fellas.d.ts>
+  If you installed the types with npm, run `npm update` in your `scripts/` folder instead.
+
+Each release is also on npm as
+[`@wildware/smart-fellas`](https://www.npmjs.com/package/@wildware/smart-fellas), at the same version.
 
 A call that's new in this repository only works once the game has a release that knows it. If a call
 in your editor does nothing in the game, update the game.

@@ -11,7 +11,8 @@ Five minutes from nothing to a script running in your map.
 - **An editor that knows TypeScript**, such as [VS Code](https://code.visualstudio.com). It's
   optional, but it completes every call as you type and underlines mistakes.
 
-You don't need Node, npm or a TypeScript compiler. The game reads TypeScript itself.
+You don't need Node, npm or a TypeScript compiler. The game reads TypeScript itself. (If you use
+npm anyway, the types are a package too: see below.)
 
 ## Your first map script
 
@@ -47,10 +48,33 @@ A mode is a folder in the game's modes folder.
 2. Copy the [`mode_template`](https://github.com/wildware-uk/smart-fellas-modding/tree/main/mode_template)
    folder from this repository into it, and rename the copy, say `my_mode`.
 3. Copy `smart-fellas.d.ts` and `tsconfig.json` from this repository into its `scripts/`
-   folder, so your editor knows the calls.
+   folder, so your editor knows the calls. Or install the types with npm: see
+   [Install the types with npm](#install-the-types-with-npm).
 4. Host a game on any map, and pick **Catch Count** under **Game mode** in the lobby.
 
 Now change `scripts/mode.ts` and `mode.json` into your own. [Game modes](Game-Modes.md) says how.
+
+## Install the types with npm
+
+If you use [Node](https://nodejs.org), you can install the types as the package
+[`@wildware/smart-fellas`](https://www.npmjs.com/package/@wildware/smart-fellas) instead of copying
+`smart-fellas.d.ts`. In your mode's `scripts/` folder, put the repository's
+[`tsconfig.json`](https://github.com/wildware-uk/smart-fellas-modding/blob/main/tsconfig.json), then
+run
+
+```
+npm install --save-dev @wildware/smart-fellas
+```
+
+and add one line to the `compilerOptions` in its `tsconfig.json`:
+
+```json
+"types": ["@wildware/smart-fellas"]
+```
+
+Without that line, your editor won't know the calls. `npm update` gets the newest types later: each
+release is on npm at the same version. The game never reads `node_modules`, and the Workshop doesn't
+upload it. A map doesn't need it: the map maker puts the types file in its scripts folder for you.
 
 ## Next
 

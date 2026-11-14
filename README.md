@@ -21,7 +21,8 @@ on the Steam Workshop.
 2. Copy the [`mode_template`](mode_template) folder into it, and rename the copy.
 3. Copy [`smart-fellas.d.ts`](smart-fellas.d.ts) and [`tsconfig.json`](tsconfig.json) into its
    `scripts/` folder, and open that folder in
-   [VS Code](https://code.visualstudio.com): every call now completes as you type.
+   [VS Code](https://code.visualstudio.com): every call now completes as you type. (Or install the
+   types with npm instead: see [Install with npm](#install-with-npm).)
 4. Change `scripts/mode.ts`. Here's a whole mode:
 
 ```ts
@@ -61,11 +62,33 @@ For a map script, the map maker puts the types file into your map's scripts fold
 wiki's [Getting started](https://github.com/wildware-uk/smart-fellas-modding/wiki/Getting-Started)
 walks through both.
 
+## Install with npm
+
+If you use [Node](https://nodejs.org), you can install the types as a package rather than copying the
+file:
+[`@wildware/smart-fellas`](https://www.npmjs.com/package/@wildware/smart-fellas). In your mode's
+`scripts/` folder, copy [`tsconfig.json`](tsconfig.json) in, then run
+
+```
+npm install --save-dev @wildware/smart-fellas
+```
+
+and add one line to the `compilerOptions` in its `tsconfig.json`:
+
+```json
+"types": ["@wildware/smart-fellas"]
+```
+
+Then `npm update` gets the newest types. Each release here is published to npm at the same version.
+The game never reads `node_modules`, and the Workshop doesn't upload it. You don't need npm at all:
+copying the file works just as well. A map doesn't need it either: the map maker puts the types file
+in its scripts folder for you.
+
 ## What's here
 
 | | |
 | --- | --- |
-| [`smart-fellas.d.ts`](smart-fellas.d.ts) | every call a script can make, with what it does |
+| [`smart-fellas.d.ts`](smart-fellas.d.ts) | every call a script can make, with what it does (also on npm as `@wildware/smart-fellas`) |
 | [`tsconfig.json`](tsconfig.json) | the editor settings to put beside your scripts |
 | [`examples/`](examples) | three map scripts to copy: a lever and door, a flooding cave, a treasure that wakes a shark |
 | [`mode_template/`](mode_template) | a small working game mode, Catch Count, to make your own |
