@@ -242,7 +242,8 @@ drawn round, so keep what matters away from the corners.
   `"roam"`, `"hunt"`, or `"goTo"` with a point. A bot on a team your mode added heeds `"own"` and
   `"hunt"` only.
 - `player.setBotLevel(level)` makes one bot play `"easy"`, `"normal"` or `"hard"` from now on, and
-  `player.botLevel` reads it (on the host; `null` for a person). Bots start at the lobby's bot skill.
+  `player.botLevel` reads it (on the host; `null` for a person). Bots start at the lobby's bot skill,
+  and go back to the level they joined at when your mode is done.
 - `player.removeBot()` takes one bot out.
 
 ```ts

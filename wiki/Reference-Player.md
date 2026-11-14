@@ -227,8 +227,9 @@ setBotLevel(level: BotLevel): void;
 ```
 
 Makes this bot play at `level` from now on: how fast it reacts, turns and aims, how much it
-notices, and how hard it chases. Other bots keep theirs. It stays for as long as the bot is
-in the match, through rounds (bots only, for game modes). New in 1.7.0.
+notices, and how hard it chases; the rest of its ways stay its own. Other bots keep theirs. It
+stays through rounds until the mode is done, when the bot goes back to the level it joined at
+(bots only, for game modes). New in 1.7.0.
 
 ### bite
 
