@@ -114,6 +114,15 @@ readonly speed: number | null;
 Their speed as a share of normal: 1 is normal, 0 held still; null once gone. On the host it is
 what scripts set; on a player's PC it is what that PC was sent for them (1 if nothing).
 
+### invisible
+
+```ts
+readonly invisible: boolean | null;
+```
+
+Whether a script made them invisible (on the host); null in every script on a player's PC,
+which isn't told. New in 1.8.0.
+
 ### data
 
 ```ts
@@ -271,6 +280,19 @@ use abilities), 1 is normal, 3 is three times as fast. It works for octopuses an
 scales swimming and crawling, while dashes keep their own pace. A creature a player drives (a
 shark on a mode's team) keeps its own speed. It stays until changed, and goes back to normal
 when a round starts and when the lobby comes back (on the host only).
+
+### setInvisible
+
+```ts
+setInvisible(invisible: boolean): void;
+```
+
+Makes them invisible to everyone else, or seen again with false. No other player's PC is sent
+their body, so nobody else sees them, their name or a marker on them, as if they were far
+off; they still see themselves and everyone else. They stay solid, and the game's bots still
+sense them. It stays until changed, through deaths and respawns, and
+goes back to seen when a round starts and when the lobby comes back (on the host only). New in
+1.8.0.
 
 ### playSound
 
