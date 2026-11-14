@@ -79,7 +79,8 @@ game.onRoundStart(() => {
 - `game.setTimeLeft`, `game.addTime` and `game.holdClock` change the clock.
 - `why` picks one of the game's own lines for the results, such as `"timeUp"` or `"allCaught"`. It must
   fit the winner: `"allCaught"`, `"allTurned"` and `"octopusesLeft"` are the divers' wins, `"timeUp"`
-  and `"diversLeft"` the octopuses'. Leave it out and the results say the mode decided.
+  and `"diversLeft"` the octopuses'. Leave it out and the results say the mode decided. Or say it in
+  your own words: `game.endRound("red", null, "Red held the reef")` (up to 80 characters).
 
 ## Scoring, the scoreboard and the banner
 

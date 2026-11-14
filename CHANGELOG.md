@@ -2,6 +2,21 @@
 
 What changed in the Smart Fellas scripting API, its examples and its wiki, newest first.
 
+## 1.4.0
+
+Calls added; scripts written for 1.0.0 to 1.3.0 work as they did. Each needs a game that knows API
+1.4.0.
+
+- Menus: `game.menu(id, spec, viewers?)` opens a card of 2 to 5 choices (a new type, `MenuSpec`)
+  that players pick with the number keys 1 to 5; `game.removeMenu(id, viewers?)` closes it.
+- `game.onChoose(handler)` hears each pick: the player, the menu's id, the choice's place and its
+  text.
+- `game.vote(spec, viewers?)` asks a question as a menu and settles with how it came out (new types,
+  `VoteSpec` and `VoteResult`).
+- `game.endRound(winner, why?, text?)` takes the script's own line for the results; `why` may be
+  `null`.
+- Wiki: a new page, Menus and votes, with examples.
+
 ## 1.3.0
 
 Calls added; scripts written for 1.0.0 to 1.2.0 work as they did. Each needs a game that knows API

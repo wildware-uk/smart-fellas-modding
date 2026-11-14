@@ -244,6 +244,44 @@ interface WidgetSpec {
 
 One HUD widget (game.widget), drawn in a column on the left of the screen, under the banner.
 
+## MenuSpec
+
+```ts
+interface MenuSpec {
+  title: string;
+  choices: string[];
+  seconds?: number;
+}
+```
+
+A menu (game.menu): a card on the right of the screen with a title over 2 to 5 choices. Players
+pick one with the number keys 1 to 5 (on the top row or the number pad), which picks nothing
+else while it shows; picking closes it for them.
+
+## VoteResult
+
+```ts
+interface VoteResult {
+  readonly winner: string | null;
+  readonly index: number | null;
+  readonly counts: readonly number[];
+}
+```
+
+How a vote (game.vote) came out.
+
+## VoteSpec
+
+```ts
+interface VoteSpec {
+  title: string;
+  choices: string[];
+  seconds: number;
+}
+```
+
+What game.vote asks: like a menu, but `seconds` must be given, from 1 to 600.
+
 ## MarkerSpec
 
 ```ts

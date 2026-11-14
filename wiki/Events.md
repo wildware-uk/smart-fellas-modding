@@ -22,6 +22,7 @@ An event is the game telling your script that something happened. You give it a 
 | `game.onInk` | an octopus squirts ink | the player |
 | `game.onGrab` | an octopus grabs at something | the player |
 | `game.onShoot` | a diver fires either gun | the player |
+| `game.onChoose` | a player picks from a menu the script opened ([Menus and votes](Menus-and-Votes.md)) | the player, the menu's id, the choice's place and its text |
 | `zone.onEnter`, `zone.onLeave` | a player swims into or out of a zone | the player |
 | `zone.onSpearEnter`, `zone.onSpearLeave` | a spear flies into or out of a zone | who threw it (or `null`) |
 | `piece.onUse` | a player uses a switch | the player |

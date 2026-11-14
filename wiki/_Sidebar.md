@@ -16,6 +16,7 @@
 - [HUD widgets and markers](HUD-Widgets-and-Markers.md)
 - [Finding things](Finding-Things.md)
 - [Rays and the ground](Rays-and-Ground.md)
+- [Menus and votes](Menus-and-Votes.md)
 - [Helpers](Helpers.md)
 
 **Finish**
