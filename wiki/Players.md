@@ -67,25 +67,26 @@ New in API 1.2.0, on the host only. `allow(skill, false)` switches one skill off
 alone, and `allow(skill, true)` gives it back. The skills are an octopus's `"dash"`, `"ink"`,
 `"grab"` and `"smell"`, and a diver's `"shoot"` (whichever gun they carry).
 
-- A skill switched off does nothing when they press it: a press plays a soft "no", and an
-  octopus's button for it shows faint.
+- A skill switched off does nothing when they use it: pressing it (or starting to hold smell) plays
+  a soft "no", an octopus's button for it shows faint, and a diver's crosshair dot dims.
 - Switching `"grab"` off lets go of whatever they hold. Ink or a shot already on its way finishes.
 - It stays through deaths and respawns, and every skill comes back as a round starts and when the
   lobby comes back. Switch skills off in `onRoundStart`.
 - `allowed(skill)` reads it back, on the host and on players' PCs.
 
 ```ts
-// The seeker can't ink or dash for the first 30 seconds of each round.
+// Divers can't shoot for the first 20 seconds of each round, so octopuses get a head start, and
+// octopuses can't smell, so they hide by sight alone.
 game.onRoundStart(() => {
-  const seeker = game.players().find((p) => p.team === "octopus");
-  if (!seeker) return;
-  seeker.allow("ink", false);
-  seeker.allow("dash", false);
-  seeker.announce("No tricks yet!", 3);
-  after(30, () => {
-    seeker.allow("ink", true);
-    seeker.allow("dash", true);
-  });
+  for (const player of game.players()) {
+    if (player.team === "diver") {
+      player.allow("shoot", false);
+      player.announce("Hold fire...", 3);
+      after(20, () => player.allow("shoot", true));
+    } else if (player.team === "octopus") {
+      player.allow("smell", false);
+    }
+  }
 });
 ```
 

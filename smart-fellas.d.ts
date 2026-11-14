@@ -346,8 +346,8 @@ interface Player {
 
   /**
    * Switches one of their skills off, or on again with true. A skill switched off does nothing when
-   * they press it: a press plays a soft "no", and an octopus's button for it shows faint. Switching
-   * grab off lets go of whatever they hold, and stops a grab on its way. Ink or a shot already on
+   * they use it: pressing it (or starting to hold smell) plays a soft "no", an octopus's button for
+   * it shows faint, and a diver's crosshair dot dims. Switching grab off lets go of whatever they hold, and stops a grab on its way. Ink or a shot already on
    * its way finishes. It stays until changed, through deaths and respawns, and every skill comes
    * back as a round starts and when the lobby comes back, so switch them off in onRoundStart (on
    * the host only).
