@@ -82,6 +82,50 @@ game.onRoundStart(() => {
   and `"diversLeft"` the octopuses'. Leave it out and the results say the mode decided. Or say it in
   your own words: `game.endRound("red", null, "Red held the reef")` (up to 80 characters).
 
+```ts
+// Overtime: if the sides are level when time runs out, the round goes on for 60 seconds more, once,
+// and the next point wins it. Divers come back in the middle of the map during overtime.
+let overtime = false;
+
+game.onRoundStart(() => {
+  overtime = false;
+  game.clearSpawn("diver");
+});
+
+game.onTimeUp(() => {
+  const divers = game.teamScore("diver");
+  const octopuses = game.teamScore("octopus");
+  if (divers === octopuses && !overtime) {
+    overtime = true;
+    // setTimeLeft, not addTime: a new time left means onTimeUp is heard again when it runs out.
+    game.setTimeLeft(60);
+    game.setSpawn("diver", 0, -10, 0);
+    game.announce("Overtime! The next point wins", 3);
+    game.banner("Overtime: the next point wins");
+    return;
+  }
+  if (divers === octopuses) {
+    game.endRound("draw");
+  } else if (overtime) {
+    game.endRound(divers > octopuses ? "diver" : "octopus", null, "Won in overtime");
+  } else {
+    game.endRound(divers > octopuses ? "diver" : "octopus");
+  }
+});
+
+// During overtime any point ends it.
+function scored(): void {
+  const divers = game.teamScore("diver");
+  const octopuses = game.teamScore("octopus");
+  if (overtime && divers !== octopuses) {
+    game.endRound(divers > octopuses ? "diver" : "octopus", null, "Won in overtime");
+  }
+}
+```
+
+Call `scored()` after your own `addTeamScore` calls. `game.holdClock(true)` stops the clock instead,
+say while a vote is open, and `game.holdClock(false)` lets it run again.
+
 ## Scoring, the scoreboard and the banner
 
 ```ts
