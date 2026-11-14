@@ -10,7 +10,8 @@ No new calls: examples and the wiki only.
   hill, a light over it, a crown marker riding on the leader, who can't ink, a leading bot playing
   easy, the last player hidden while the hill moves, the hill settling on the ground with a ray, the
   water darkening at the end, and round wins kept in `player.data`.
-- Wiki: an overtime example on Game modes, and a `game.raycast` example on Rays and the ground.
+- Wiki: an overtime example on Game modes, a `game.raycast` example on Rays and the ground, and
+  on How scripts run, roughly what each kind of call costs of a tick's work.
 
 ## 1.8.0
 
