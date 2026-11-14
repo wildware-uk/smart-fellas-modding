@@ -1,7 +1,8 @@
 # Menus and votes
 
 A menu is a card on the right of a player's screen: a title over 2 to 5 choices. The player picks
-one with the number keys 1 to 5. New in API 1.4.0.
+one with the number keys 1 to 5, or on a controller moves along it with the D-pad's up and down and
+picks with right. New in API 1.4.0.
 
 | Call | Does |
 | --- | --- |
@@ -17,12 +18,12 @@ stays until the player picks or you close it.
 - **One menu at a time.** A new menu takes the place of the one a player has.
 - **Picking closes it** for that player, and your handler hears the pick once. To let them pick
   again (a shop, say), open the menu again in the handler.
-- **The number keys pick while it shows.** They do nothing else then (an octopus's saved looks
-  wait), and nothing at all while chat or the pause menu is open.
+- **The number keys (and the D-pad) belong to the menu while it shows.** They do nothing else then
+  (an octopus's saved looks wait), and nothing at all while chat or the pause menu is open.
 - A menu reaches who is in the match now: a player who joins later isn't shown it. The lobby
   closes every menu.
 - Only host scripts open menus: in a `client/` script `game.menu` does nothing.
-- Picking needs a keyboard for now.
+- At most 16 `menu` and `removeMenu` calls a tick; more throws an error you can catch.
 
 ## Votes
 

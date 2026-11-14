@@ -505,8 +505,8 @@ Opens a menu (ids as for widget) on the screens of `viewers`, or everyone's if l
 player has one menu at a time: a new one takes the place of the one they have. A pick calls
 game.onChoose's handlers and closes the menu for that player; open it again to let them pick
 again. It is shown to who is in the match now, not to players who join later, and the lobby
-closes every menu. Host scripts only: in a client/ script it does nothing. Picking needs a
-keyboard for now.
+closes every menu. Host scripts only: in a client/ script it does nothing. At most 16 menu
+and removeMenu calls a tick; more throws.
 
 ### removeMenu
 

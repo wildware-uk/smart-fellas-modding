@@ -245,8 +245,9 @@ interface WidgetSpec {
 
 /**
  * A menu (game.menu): a card on the right of the screen with a title over 2 to 5 choices. Players
- * pick one with the number keys 1 to 5 (on the top row or the number pad), which picks nothing
- * else while it shows; picking closes it for them.
+ * pick one with the number keys 1 to 5 (on the top row or the number pad), or on a controller move
+ * along it with the D-pad's up and down and pick with right. Those keys and buttons do nothing else
+ * while it shows. Picking closes it for them.
  */
 interface MenuSpec {
   /** The question or heading, 1 to 60 characters. */
@@ -713,8 +714,8 @@ interface Game {
    * player has one menu at a time: a new one takes the place of the one they have. A pick calls
    * game.onChoose's handlers and closes the menu for that player; open it again to let them pick
    * again. It is shown to who is in the match now, not to players who join later, and the lobby
-   * closes every menu. Host scripts only: in a client/ script it does nothing. Picking needs a
-   * keyboard for now.
+   * closes every menu. Host scripts only: in a client/ script it does nothing. At most 16 menu
+   * and removeMenu calls a tick; more throws.
    */
   menu(id: string, spec: MenuSpec, viewers?: Viewers): void;
   /** Closes the menu with this id for `viewers`, or everyone, if they still have it. */

@@ -255,8 +255,9 @@ interface MenuSpec {
 ```
 
 A menu (game.menu): a card on the right of the screen with a title over 2 to 5 choices. Players
-pick one with the number keys 1 to 5 (on the top row or the number pad), which picks nothing
-else while it shows; picking closes it for them.
+pick one with the number keys 1 to 5 (on the top row or the number pad), or on a controller move
+along it with the D-pad's up and down and pick with right. Those keys and buttons do nothing else
+while it shows. Picking closes it for them.
 
 ## VoteResult
 
