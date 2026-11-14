@@ -14,7 +14,10 @@ understands is the one it was built with.
 
 ## What changed
 
-The newest version is **1.8.0**. It adds invisible players: `player.setInvisible(true)` hides a
+The newest version is **1.8.1**. It has no new calls: the showcase mode, King of the Reef, uses many
+more of them, and the wiki has more examples.
+
+Version 1.8.0 added invisible players: `player.setInvisible(true)` hides a
 player from everyone else, and `player.invisible` reads it ([Players](Players.md#invisible-players)).
 
 Version 1.7.0 added bot levels: `player.setBotLevel(level)` makes one bot play `"easy"`, `"normal"`
