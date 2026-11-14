@@ -128,7 +128,8 @@ const phases: StateMachine<HillPhase> = new StateMachine<HillPhase>(
 );
 
 game.onMatchStart(() => {
-  game.scoreboard("Points", "Dashes", "Inks");
+  // The score column shows each player's points; two short columns of our own count dashes and inks.
+  game.scoreboard("Dash", "Ink");
   // Nobody is out for good: whoever is caught comes back after 5 seconds.
   game.setFate("octopus", "respawn", 5);
   game.setFate("diver", "respawn", 5);
@@ -140,9 +141,8 @@ game.onRoundStart(() => {
   log("round starts; goal", goal(), "hold", holdSeconds());
   game.banner(`Hold the hill. First to ${goal()} points wins`);
   for (const player of game.players()) {
-    player.setCell("Points", 0);
-    player.setCell("Dashes", 0);
-    player.setCell("Inks", 0);
+    player.setCell("Dash", 0);
+    player.setCell("Ink", 0);
   }
   phases.go("warmup");
 });
@@ -156,8 +156,8 @@ game.onRoundEnd(() => {
 });
 
 // Count dashes and inks: just for the scoreboard, to show the events.
-game.onDash((player) => player.setCell("Dashes", store.add(`dashes:${player.id}`)));
-game.onInk((player) => player.setCell("Inks", store.add(`inks:${player.id}`)));
+game.onDash((player) => player.setCell("Dash", store.add(`dashes:${player.id}`)));
+game.onInk((player) => player.setCell("Ink", store.add(`inks:${player.id}`)));
 
 function topScorer(): Player | null {
   let best: Player | null = null;
@@ -192,7 +192,6 @@ every(1, () => {
   for (const player of onHill) {
     const points = store.add(`points:${player.id}`, onHill.length === 1 ? 2 : 1);
     player.setScore(points);
-    player.setCell("Points", points);
     if (points >= goal()) {
       game.announce(`${player.name} is King of the Reef!`, 4);
       game.endRound(player);
