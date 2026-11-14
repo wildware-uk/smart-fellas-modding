@@ -14,6 +14,21 @@ understands is the one it was built with.
 
 ## What changed
 
+The newest version is **1.1.0**. It adds:
+
+- [Helpers](Helpers.md) every script has: `Vec`, `Maths`, `Random`, `Ease`, `tween`, `StateMachine`,
+  `store` and `log`.
+- [Finding things](Finding-Things.md): `game.playersNear`, `game.nearestPlayer`,
+  `game.creaturesNear` and `game.nearestCreature`.
+- [HUD widgets and markers](HUD-Widgets-and-Markers.md): `game.announce`, `game.widget`,
+  `game.marker` and their `remove` calls, for everyone, a team, or one player.
+- For one player: `player.setSpeed` and `player.speed`, `player.playSound` and `player.announce`
+  ([Players](Players.md)).
+- `game.playSoundForTeam` ([Sounds](Sounds.md)).
+- The events `game.onDash`, `game.onInk`, `game.onGrab` and `game.onShoot` ([Events](Events.md)).
+
+Scripts written for 1.0.0 work as they did.
+
 [CHANGELOG.md](https://github.com/wildware-uk/smart-fellas-modding/blob/main/CHANGELOG.md) says what
 changed in each version, newest first.
 

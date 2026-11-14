@@ -19,6 +19,9 @@ A script plays the game's own sounds. It can't bring sounds of its own.
 
 - `game.playSound(name)` plays it for everyone, wherever they are.
 - `game.playSoundAt(name, x, y, z)` plays it at a point, heard by whoever is near.
+- `game.playSoundForTeam(team, name)` plays it for one team only, wherever they are (new in API
+  1.1.0).
+- `player.playSound(name)` plays it for one player alone (new in API 1.1.0).
 
 A few sounds a second at most; more are dropped. In a `client/` script, a sound is for that player
 alone.
@@ -42,9 +45,34 @@ every(12, () => {
 });
 ```
 
+## Example: a warning for one team
+
+```ts
+// When a shark appears, the octopuses hear a swell and the divers hear nothing.
+every(1, () => {
+  if (game.phase !== "play") {
+    return;
+  }
+  const sharks = game.creatures("shark").length;
+  if (sharks > store.get("sharks", 0)) {
+    game.playSoundForTeam("octopus", "swell");
+  }
+  store.set("sharks", sharks);
+});
+```
+
 ## Example: a sound for one player only
 
-Put this in `client/`. It runs on each player's own PC, so the chime is theirs alone.
+From the host, `player.playSound` plays a sound for that player alone:
+
+```ts
+// The diver who makes a catch hears a chime.
+game.onCaught((_octopus, by) => {
+  by?.playSound("chime");
+});
+```
+
+A `client/` script can do the same for its own player. Put this in `client/`. It runs on each player's own PC, so the chime is theirs alone.
 
 ```ts
 // client/welcome.ts: a soft chime and a tip for each player as their round starts.

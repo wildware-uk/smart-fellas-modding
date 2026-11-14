@@ -90,7 +90,7 @@ in its scripts folder for you.
 | --- | --- |
 | [`smart-fellas.d.ts`](smart-fellas.d.ts) | every call a script can make, with what it does (also on npm as `@wildware/smart-fellas`) |
 | [`tsconfig.json`](tsconfig.json) | the editor settings to put beside your scripts |
-| [`examples/`](examples) | three map scripts to copy: a lever and door, a flooding cave, a treasure that wakes a shark |
+| [`examples/`](examples) | three map scripts to copy (a lever and door, a flooding cave, a treasure that wakes a shark), and a whole game mode, [King of the Reef](examples/showcase_mode), that shows off the helpers and the HUD |
 | [`mode_template/`](mode_template) | a small working game mode, Catch Count, to make your own |
 | [`wiki/`](wiki) | the wiki's pages, copied to [the wiki](https://github.com/wildware-uk/smart-fellas-modding/wiki) |
 | [`tools/`](tools) | the checks below |
@@ -105,8 +105,11 @@ in its scripts folder for you.
   [Events](https://github.com/wildware-uk/smart-fellas-modding/wiki/Events),
   [Timers](https://github.com/wildware-uk/smart-fellas-modding/wiki/Timers),
   [Creatures](https://github.com/wildware-uk/smart-fellas-modding/wiki/Creatures),
-  [Sounds](https://github.com/wildware-uk/smart-fellas-modding/wiki/Sounds) and
-  [Messages and HUD](https://github.com/wildware-uk/smart-fellas-modding/wiki/Messages-and-HUD)
+  [Sounds](https://github.com/wildware-uk/smart-fellas-modding/wiki/Sounds),
+  [Messages and HUD](https://github.com/wildware-uk/smart-fellas-modding/wiki/Messages-and-HUD),
+  [HUD widgets and markers](https://github.com/wildware-uk/smart-fellas-modding/wiki/HUD-Widgets-and-Markers),
+  [Finding things](https://github.com/wildware-uk/smart-fellas-modding/wiki/Finding-Things) and
+  [Helpers](https://github.com/wildware-uk/smart-fellas-modding/wiki/Helpers)
 - [Testing and publishing](https://github.com/wildware-uk/smart-fellas-modding/wiki/Testing-and-Publishing),
   [Common mistakes](https://github.com/wildware-uk/smart-fellas-modding/wiki/Common-Mistakes) and the
   [FAQ](https://github.com/wildware-uk/smart-fellas-modding/wiki/FAQ)
@@ -116,7 +119,7 @@ in its scripts folder for you.
 ## Every example is checked
 
 `npm ci && npm run check` type-checks every example here against the types: the map scripts, the mode
-template, and every code block in this README and the wiki. It also checks the wiki's reference pages
+template, the example mode, and every code block in this README and the wiki. It also checks the wiki's reference pages
 still match the types file. It runs on every change to this repository.
 
 ## Where this comes from

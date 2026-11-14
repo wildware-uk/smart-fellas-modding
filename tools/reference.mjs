@@ -4,8 +4,9 @@
 //   node tools/reference.mjs --check   say which pages differ from what the types make, and fail if any do
 //
 // Each interface with calls on it (Game, Player, Zone, Piece, Creature) gets a page of its own. The
-// timers get one, every other type goes on Reference-Types.md, and Reference.md lists them all under
-// the notes at the top of the types file. Never edit a Reference page by hand: change the types file.
+// timers get one, the helpers every script has (Vec, Maths, Random and the rest, in HELPERS) get one,
+// every other type goes on Reference-Types.md, and Reference.md lists them all under the notes at the
+// top of the types file. Never edit a Reference page by hand: change the types file.
 import { readFileSync, readdirSync, writeFileSync, rmSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -15,6 +16,8 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const TYPES = join(root, "smart-fellas.d.ts");
 const WIKI = join(root, "wiki");
 const PREFIX = "Reference";
+/** The helpers' names: they go on Reference-Helpers.md, each with its parts listed under it. */
+const HELPERS = new Set(["Vec", "Maths", "Random", "Easing", "Ease", "tween", "State", "StateMachine", "store", "log"]);
 const STAMP = "<!-- Made by tools/reference.mjs from smart-fellas.d.ts. Don't edit: change the types file, then run npm run reference. -->";
 
 /** The doc comment on a node, as plain Markdown text, or "". */
@@ -90,6 +93,57 @@ function declarationsPage(title, intro, nodes, source) {
   return lines.join("\n").trimEnd() + "\n";
 }
 
+/** The members of a class, an interface, or a const whose type is written out as an object. */
+function membersOf(node) {
+  if (ts.isClassDeclaration(node) || ts.isInterfaceDeclaration(node)) {
+    return [...node.members];
+  }
+  if (ts.isVariableStatement(node)) {
+    const type = node.declarationList.declarations[0].type;
+    if (type && ts.isTypeLiteralNode(type)) {
+      return [...type.members];
+    }
+  }
+  return [];
+}
+
+function nameOf(node) {
+  return ts.isVariableStatement(node) ? node.declarationList.declarations[0].name.text : node.name.text;
+}
+
+/**
+ * The helpers' page: each helper under a heading of its own, with its doc, and either its whole
+ * declaration (when it is short) or each of its parts with theirs.
+ */
+function helpersPage(nodes, source) {
+  const lines = [
+    STAMP,
+    "",
+    "# Helpers",
+    "",
+    "Plain JavaScript every script has, on the host and on players' PCs alike. They change nothing in the match by themselves. See [Helpers](Helpers.md) for examples.",
+    "",
+  ];
+  for (const node of nodes) {
+    const name = nameOf(node);
+    lines.push(`## ${name}`, "");
+    const said = docOf(node, source);
+    if (said) {
+      lines.push(said, "");
+    }
+    const members = membersOf(node).filter((member) => docOf(member, source));
+    if (members.length === 0) {
+      lines.push(block(signature(node, source)), "");
+      continue;
+    }
+    for (const member of members) {
+      const label = ts.isConstructorDeclaration(member) ? `new ${name}` : `${name}.${memberName(member, source)}`;
+      lines.push(`### ${label}`, "", block(signature(member, source)), "", docOf(member, source), "");
+    }
+  }
+  return lines.join("\n").trimEnd() + "\n";
+}
+
 /** The plain // notes at the very top of the types file, as paragraphs and lists. */
 function headerNotes(text) {
   const notes = [];
@@ -120,8 +174,11 @@ export function referencePages() {
   const timers = [];
   const globals = [];
   const own = [];
+  const helpers = [];
   for (const statement of source.statements) {
-    if (ts.isInterfaceDeclaration(statement)) {
+    if ((statement.name || ts.isVariableStatement(statement)) && HELPERS.has(nameOf(statement))) {
+      helpers.push(statement);
+    } else if (ts.isInterfaceDeclaration(statement)) {
       if (statement.members.some((member) => ts.isMethodSignature(member))) {
         const page = `${PREFIX}-${statement.name.text}`;
         pages.set(`${page}.md`, interfacePage(statement, source));
@@ -148,6 +205,7 @@ export function referencePages() {
       source,
     ),
   );
+  pages.set(`${PREFIX}-Helpers.md`, helpersPage(helpers, source));
   pages.set(
     `${PREFIX}-Types.md`,
     declarationsPage("Types", "The smaller types the calls take and give back.", types, source),
@@ -164,7 +222,8 @@ export function referencePages() {
       const page = own.find((entry) => global.code.includes(`: ${entry.name}`));
       index.push(`- \`${global.name}\`: ${global.doc || "a global"}${page ? ` See [${page.name}](${page.page}.md).` : ""}`);
     }
-    index.push("- `after`, `every`, `cancel`: see [Timers](Reference-Timers.md).", "");
+    index.push("- `after`, `every`, `cancel`: see [Timers](Reference-Timers.md).");
+    index.push(`- ${helpers.map((node) => `\`${nameOf(node)}\``).join(", ")}: see [Helpers](${PREFIX}-Helpers.md).`, "");
   }
   index.push("## Pages", "");
   for (const entry of own) {
@@ -172,6 +231,7 @@ export function referencePages() {
     index.push(`- [${entry.name}](${entry.page}.md): ${first}`);
   }
   index.push(`- [Timers](${PREFIX}-Timers.md): \`after\`, \`every\` and \`cancel\`.`);
+  index.push(`- [Helpers](${PREFIX}-Helpers.md): \`Vec\`, \`Maths\`, \`Random\`, \`tween\`, \`StateMachine\`, \`store\`, \`log\` and the rest.`);
   index.push(`- [Types](${PREFIX}-Types.md): the smaller types the calls take and give back.`, "");
   index.push("## Notes from the top of the types file", "", headerNotes(text), "");
   pages.set(`${PREFIX}.md`, index.join("\n").trimEnd() + "\n");

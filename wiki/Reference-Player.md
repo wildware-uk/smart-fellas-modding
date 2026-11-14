@@ -96,6 +96,15 @@ readonly role: string;
 Their role this round, as the match's scripts set it ("" for none). Only the host's scripts know
 it: it is never sent to players, so a mode can keep roles secret.
 
+### speed
+
+```ts
+readonly speed: number | null;
+```
+
+Their speed as a share of normal: 1 is normal, 0 held still; null once gone. On the host it is
+what scripts set; on a player's PC it is what that PC was sent for them (1 if nothing).
+
 ## What you can call
 
 ### moveTo
@@ -220,3 +229,33 @@ setLine(text: string): void;
 
 Shows them alone a line under the banner, until it is changed or a round starts, or the lobby
 comes back: 0 to 80 characters, "" to clear it. It is on screen, not in chat (for game modes).
+
+### setSpeed
+
+```ts
+setSpeed(share: number): void;
+```
+
+Sets their speed as a share of normal, 0 to 3: 0 holds them still (they can still look round and
+use abilities), 1 is normal, 3 is three times as fast. It works for octopuses and divers: it
+scales swimming and crawling, while dashes keep their own pace. A creature a player drives (a
+shark on a mode's team) keeps its own speed. It stays until changed, and goes back to normal
+when a round starts and when the lobby comes back (on the host only).
+
+### playSound
+
+```ts
+playSound(sound: SoundName): void;
+```
+
+Plays one of the game's sounds for them alone, wherever they are (in a client/ script, on that player's own screen only).
+
+### announce
+
+```ts
+announce(text: string, seconds?: number): void;
+```
+
+Shows them alone big text in the middle of the screen, as game.announce does for more players:
+1 to 60 characters, for 0.5 to 15 seconds (3 if left out). It counts as a message from the map,
+with the same limits as game.say (in a client/ script, on that player's own screen only).

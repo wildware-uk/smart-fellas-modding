@@ -8,6 +8,7 @@ Every call a script can make, straight from `smart-fellas.d.ts`. These pages are
 
 - `game`: The match. See [Game](Reference-Game.md).
 - `after`, `every`, `cancel`: see [Timers](Reference-Timers.md).
+- `Vec`, `Maths`, `Random`, `Easing`, `Ease`, `tween`, `State`, `StateMachine`, `store`, `log`: see [Helpers](Reference-Helpers.md).
 
 ## Pages
 
@@ -17,6 +18,7 @@ Every call a script can make, straight from `smart-fellas.d.ts`. These pages are
 - [Creature](Reference-Creature.md): A creature or food in the match, placed by the map or spawned by a script.
 - [Game](Reference-Game.md): The match, as the script sees it.
 - [Timers](Reference-Timers.md): `after`, `every` and `cancel`.
+- [Helpers](Reference-Helpers.md): `Vec`, `Maths`, `Random`, `tween`, `StateMachine`, `store`, `log` and the rest.
 - [Types](Reference-Types.md): the smaller types the calls take and give back.
 
 ## Notes from the top of the types file
@@ -40,7 +42,8 @@ How a script runs:
 - The scripts in one place are loaded at the start of the match, in name order, and share their globals. The host's game loads shared/ first, then its own. There is no import: the game loads them all itself.
 - Register handlers once, at the top of a file. The game calls them each tick (64 a second).
 - Actions such as door.moveTo() are queued and applied after your handlers finish, so what you read stays as the tick began.
-- There is no clock (no Date) and no Math.random: use game.seconds and game.random().
+- There is no clock (no Date) and no Math.random: use game.seconds and game.random(), or a Random of your own.
+- Every script also has the helpers at the end of this file: Vec, Maths, Random, Ease, tween, StateMachine, store and log.
 - A script that runs too long, uses too much memory, or throws and doesn't catch it is switched off for the rest of the match, and the host sees one line saying why.
 - A bad argument (a name that doesn't exist, a point far outside the map) throws an Error you can catch. A handle to something that has gone does nothing and reads as gone.
 
@@ -61,3 +64,5 @@ mode.json may also say, each optional:
 - "revives": true if the lobby's Revives setting applies: a netted octopus may be freed.
 The calls marked "for game modes" change the round's rules. A map's script may use them too, and
 the mode then hears what happened through its own events (onTeamChange, onRoundEnd).
+The calls marked "on the host only" work only in the host's game: a client/ script's call does
+nothing. The host's game decides them and sends them to the players they are for.

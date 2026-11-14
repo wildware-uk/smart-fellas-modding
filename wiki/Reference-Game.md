@@ -134,6 +134,40 @@ Sharks, eels and gropers come only while a round is being played. If the game fi
 the handle reads as gone from the next tick. A script may have at most 1 shark, 4 eels, 4
 gropers, 256 of each food and 256 fish it spawned alive at once; asking for more throws.
 
+### playersNear
+
+```ts
+playersNear(point: Point, radius: number, team?: Team): Player[];
+```
+
+Living players with a position within `radius` metres of `point`, nearest first; only `team`'s if
+given. On a player's PC it finds only the players that PC was sent.
+
+### nearestPlayer
+
+```ts
+nearestPlayer(point: Point, team?: Team, except?: Player): Player | null;
+```
+
+The nearest living player with a position, of `team` if given, leaving out `except` (say, the
+player asking); or null if there is none.
+
+### creaturesNear
+
+```ts
+creaturesNear(point: Point, radius: number, kind?: CreatureKind): Creature[];
+```
+
+Living creatures and food within `radius` metres of `point`, nearest first; only `kind`'s if given.
+
+### nearestCreature
+
+```ts
+nearestCreature(point: Point, kind?: CreatureKind): Creature | null;
+```
+
+The nearest living creature or food, of `kind` if given; or null if there is none.
+
 ### say
 
 ```ts
@@ -157,6 +191,14 @@ playSound(sound: SoundName): void;
 ```
 
 Plays one of the game's sounds for everyone, wherever they are. A few a second at most.
+
+### playSoundForTeam
+
+```ts
+playSoundForTeam(team: Team, sound: SoundName): void;
+```
+
+Plays one of the game's sounds for one team only, wherever they are (in a client/ script, on that player's own screen only).
 
 ### playSoundAt
 
@@ -357,6 +399,65 @@ banner(text: string): void;
 
 Shows everyone a banner across the top: 0 to 80 characters, "" to clear it (for game modes).
 
+### announce
+
+```ts
+announce(text: string, seconds?: number, viewers?: Viewers): void;
+```
+
+Shows big text in the middle of the screen: 1 to 60 characters, for `seconds` (0.5 to 15, 3 if
+left out). A new one replaces the one showing. It counts as a message from the map, towards the
+same limits as game.say: at most 3 a tick and 6 a second for any one player, and a call that
+would go over throws. `viewers` is one team or one player; leave it out for everyone (in a
+client/ script, on that player's own screen only).
+
+### widget
+
+```ts
+widget(id: string, spec: WidgetSpec, viewers?: Viewers): void;
+```
+
+Shows a HUD widget in the column on the left of the screen, under the banner, or changes the
+one with this id: `id` is 1 to 16 letters, digits, - or _. At most 8 widgets show on any
+player's screen: a 9th isn't shown on that screen (no error), and changing or removing those
+already there always works. They stay until removed, or until the lobby comes back. A call that
+changes nothing sends nothing, so it is fine to call it every tick; when a script changes a lot
+at once, each player is sent a few changes a tick and the latest of each wins. A "timer" counts
+down by itself: asking for it again with the same seconds doesn't restart it; new seconds do.
+A player who joins later sees what is showing for everyone and for their team, and one who
+moves to another team swaps the old team's for the new one's. A map's and a mode's widgets
+never share an id, and a client/ script's own widgets have their own room of 8. `viewers` is one team or one player; leave it out for
+everyone (in a client/ script, on that player's own screen only).
+
+### removeWidget
+
+```ts
+removeWidget(id: string, viewers?: Viewers): void;
+```
+
+Takes the widget with this id off the screens of `viewers`, or everyone's if left out
+(in a client/ script, on that player's own screen only).
+
+### marker
+
+```ts
+marker(id: string, spec: MarkerSpec, viewers?: Viewers): void;
+```
+
+Shows a marker in the world, or moves or changes the one with this id (ids as for widget). At
+most 16 show on any player's screen: a 17th isn't shown on that screen (no error), and changing
+or removing those already there always works. Like widgets, it reaches players who join later.
+`viewers` is one team or one player; leave it out for everyone (in a client/ script, on that player's own screen only).
+
+### removeMarker
+
+```ts
+removeMarker(id: string, viewers?: Viewers): void;
+```
+
+Takes the marker with this id off the screens of `viewers`, or everyone's if left out
+(in a client/ script, on that player's own screen only).
+
 ### onMatchStart
 
 ```ts
@@ -464,3 +565,36 @@ onAbilityLand(handler: (player: Player, ability: string, target: Player) => void
 ```
 
 Calls `handler` when an ability's lunge reaches who it was aimed at.
+
+### onDash
+
+```ts
+onDash(handler: (player: Player) => void): void;
+```
+
+Calls `handler` when a player dashes (octopuses only). Heard on the host only. onDash, onInk and onGrab are
+for octopuses only: a mode's own team's ability keys are heard with onAbility.
+
+### onInk
+
+```ts
+onInk(handler: (player: Player) => void): void;
+```
+
+Calls `handler` when an octopus squirts ink. Heard on the host only.
+
+### onGrab
+
+```ts
+onGrab(handler: (player: Player) => void): void;
+```
+
+Calls `handler` when an octopus grabs at something. Heard on the host only.
+
+### onShoot
+
+```ts
+onShoot(handler: (player: Player) => void): void;
+```
+
+Calls `handler` when a diver fires either gun. Heard on the host only.

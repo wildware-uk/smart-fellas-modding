@@ -15,6 +15,7 @@ same object, so `===` works, and you can keep one in a variable or a `Map`.
 | `energy` | their energy, or `null` while they have no body |
 | `isBot` | whether the game's AI plays them |
 | `score`, `role` | what your scripts set this round |
+| `speed` | their speed as a share of normal: 1 is normal, 0 is held still. On a player's PC, what it was sent (1 if nothing) |
 | `gone` | whether they have left. Then `team`, `life`, `position` and `energy` read as `null` |
 
 On a player's own PC (a `client/` script), a player that PC wasn't sent has no position.
@@ -25,6 +26,37 @@ On a player's own PC (a `client/` script), a player that PC wasn't sent has no p
 - `say(text)` and `setLine(text)`: see [Messages and HUD](Messages-and-HUD.md)
 - For game modes: `setTeam`, `setRole`, `setScore`, `addScore`, `setCell`, `bite`, and for bots
   `setGoal` and `removeBot`. See [Game modes](Game-Modes.md).
+- `setSpeed(share)` (on the host only), `playSound(sound)` and `announce(text, seconds?)`. See below.
+
+To find the players near a point, use `game.playersNear` and `game.nearestPlayer`: see
+[Finding things](Finding-Things.md).
+
+## Speed, sounds and announcements for one player
+
+New in API 1.1.0. `setSpeed` works on the host only; in a `client/` script, `playSound` and
+`announce` are for that player's own screen, as `say` is:
+
+- `setSpeed(share)` sets how fast they swim and crawl, as a share of normal: 0 to 3. 0 holds them
+  still (they can still look round and use abilities), 1 is normal. It works for octopuses and
+  divers; dashes keep their own pace, and a creature a player drives (a shark on a mode's team)
+  keeps its own speed. It stays until changed, and goes back to normal when a round starts and when
+  the lobby comes back. `speed` reads it back, on the host and on players' PCs.
+- `announce` counts as a message from the map, with the same limits as `say`.
+- `playSound(sound)` plays one of the game's [sounds](Sounds.md) for them alone.
+- `announce(text, seconds?)` shows them alone big text in the middle of the screen: see
+  [HUD widgets and markers](HUD-Widgets-and-Markers.md).
+
+```ts
+// Whoever is caught is dazed: they swim at half speed for 5 seconds after they come back.
+game.onRespawn((player) => {
+  player.setSpeed(0.5);
+  player.announce("Dazed...", 2);
+  player.playSound("groan");
+  after(5, () => {
+    player.setSpeed(1);
+  });
+});
+```
 
 Every call and its range is on the [Player reference](Reference-Player.md).
 

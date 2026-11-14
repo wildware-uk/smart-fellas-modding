@@ -3,10 +3,11 @@
 //   node tools/check.mjs
 //
 // - Type-checks every example against smart-fellas.d.ts, with the options in tsconfig.json:
-//   each file in examples/ on its own, the mode template's scripts as the game loads them
-//   (its own scripts with shared/, and client/ with shared/), and every ```ts code block in README.md,
-//   mode_template/README.md and wiki/ on its own. The Reference pages' blocks are the types' own
-//   lines, so they are checked by matching the types instead.
+//   each file in examples/ on its own, the mode template's and each example mode's scripts as the
+//   game loads them (its own scripts with shared/, and client/ with shared/), and every ```ts code
+//   block in README.md, mode_template/README.md, an example mode's README.md and wiki/ on its own.
+//   The Reference pages' blocks are the types' own lines, so they are checked by matching the types
+//   instead.
 // - Refuses what the game refuses or lacks in a script: import, export, require, enum, namespace,
 //   constructor parameter fields, Date and Math.random.
 // - Checks the wiki's reference pages still match the types (tools/reference.mjs).
@@ -166,16 +167,28 @@ const groups = [];
 for (const path of filesIn(join(root, "examples"), isScript)) {
   groups.push(units([path]));
 }
-// The mode template, as the game loads it: the host's world, and each player's.
-const scripts = join(root, "mode_template", "scripts");
-const shared = units(filesIn(join(scripts, "shared"), isScript));
-groups.push([...shared, ...units(filesIn(scripts, isScript))]);
-const client = units(filesIn(join(scripts, "client"), isScript));
-if (client.length > 0) {
-  groups.push([...shared, ...client]);
+// The mode template and each example mode (a folder in examples/ with a scripts/ folder), as the game
+// loads a mode: the host's world, and each player's.
+function addMode(scripts) {
+  const shared = units(filesIn(join(scripts, "shared"), isScript));
+  groups.push([...shared, ...units(filesIn(scripts, isScript))]);
+  const client = units(filesIn(join(scripts, "client"), isScript));
+  if (client.length > 0) {
+    groups.push([...shared, ...client]);
+  }
+}
+addMode(join(root, "mode_template", "scripts"));
+for (const name of readdirSync(join(root, "examples")).sort()) {
+  const scripts = join(root, "examples", name, "scripts");
+  if (existsSync(scripts) && statSync(scripts).isDirectory()) {
+    addMode(scripts);
+  }
 }
 // Every code block in the docs is a whole script on its own.
-const docs = [join(root, "README.md"), join(root, "mode_template", "README.md"), ...filesIn(join(root, "wiki"), (name) => name.endsWith(".md") && !name.startsWith("Reference"))];
+const exampleReadmes = readdirSync(join(root, "examples"))
+  .sort()
+  .map((name) => join(root, "examples", name, "README.md"));
+const docs = [join(root, "README.md"), join(root, "mode_template", "README.md"), ...exampleReadmes, ...filesIn(join(root, "wiki"), (name) => name.endsWith(".md") && !name.startsWith("Reference"))];
 let blocks = 0;
 for (const path of docs.filter((path) => existsSync(path))) {
   for (const block of blocksIn(path)) {

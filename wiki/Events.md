@@ -18,13 +18,20 @@ An event is the game telling your script that something happened. You give it a 
 | `game.onCaught` | a player is caught | the player, who caught them (or `null`), and how: `"jaws"` or `"net"` |
 | `game.onKilled` | a player is killed | the player, and who killed them (or `null`) |
 | `game.onAbility`, `game.onAbilityLand` | a mode's ability is used, or its lunge lands | the user, the ability's id, the target |
+| `game.onDash` | a player dashes (octopuses only) | the player |
+| `game.onInk` | an octopus squirts ink | the player |
+| `game.onGrab` | an octopus grabs at something | the player |
+| `game.onShoot` | a diver fires either gun | the player |
 | `zone.onEnter`, `zone.onLeave` | a player swims into or out of a zone | the player |
 | `zone.onSpearEnter`, `zone.onSpearLeave` | a spear flies into or out of a zone | who threw it (or `null`) |
 | `piece.onUse` | a player uses a switch | the player |
 
 A `client/` script on a player's PC hears the match start, players join and leave, rounds start and
 end, players it can see go in and out of zones, and its own player using a switch. Meals, catches,
-kills and spears are heard on the host only.
+kills, spears, dashes, ink, grabs and shots are heard on the host only.
+
+`onDash`, `onInk`, `onGrab` and `onShoot` are new in API 1.1.0. `onDash`, `onInk` and `onGrab` are
+for octopuses only: the ability keys of a team a mode added are heard with `onAbility`, as before.
 
 ## Example: a feast announcer
 
@@ -89,6 +96,27 @@ game.onKilled((player, by) => {
     by.addEnergy(50);
     by.say("Bounty claimed!");
     marked = null;
+  }
+});
+```
+
+## Example: ink costs energy
+
+```ts
+// Each squirt of ink costs an octopus 5 energy, and every dash 2. A diver's tenth shot in a round
+// is told to their team.
+game.onInk((player) => {
+  player.addEnergy(-5);
+});
+
+game.onDash((player) => {
+  player.addEnergy(-2);
+});
+
+game.onShoot((diver) => {
+  const shots = store.add(`shots:${diver.id}`);
+  if (shots === 10) {
+    game.sayToTeam("diver", `${diver.name} has fired 10 shots this round.`);
   }
 });
 ```

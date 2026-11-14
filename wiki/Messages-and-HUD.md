@@ -11,6 +11,10 @@ How a script talks to players.
 | `player.setLine(text)` | that player | a line under the banner, until changed or the round starts (for game modes) |
 | `game.scoreboard(...columns)` | everyone | the live scoreboard's columns (for game modes) |
 | `player.setCell(column, value)` | everyone | that player's cell in a scoreboard column (for game modes) |
+| `game.announce(text, seconds?, viewers?)` | everyone, a team, or a player | big text in the middle of the screen (on the host only) |
+| `player.announce(text, seconds?)` | that player | big text in the middle of the screen (on the host only) |
+| `game.widget(id, spec, viewers?)` | everyone, a team, or a player | a text line, bar, counter or countdown on the left, under the banner (on the host only) |
+| `game.marker(id, spec, viewers?)` | everyone, a team, or a player | a marker at a point in the world, seen through rock (on the host only) |
 
 - Chat messages are 1 to 120 characters, and a few a second at most. They pass through each player's
   own chat filter.
@@ -19,6 +23,9 @@ How a script talks to players.
   characters. Calling `game.scoreboard()` with none hides it.
 
 In a `client/` script, `game.say` is for that player alone.
+
+Announcements, widgets and markers are new in API 1.1.0. They have a page of their own:
+[HUD widgets and markers](HUD-Widgets-and-Markers.md).
 
 ## Example: a race with a live scoreboard
 
