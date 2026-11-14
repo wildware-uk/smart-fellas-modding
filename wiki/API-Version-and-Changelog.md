@@ -17,7 +17,7 @@ understands is the one it was built with.
 The newest version is **1.3.0**. It adds [Rays and the ground](Rays-and-Ground.md):
 
 - `game.raycast(from, to)`: where a straight line first meets the map.
-- `game.lineOfSight(a, b)`, `game.groundBelow(point)` and `game.randomGroundPoint()`.
+- `game.lineOfSight(a, b)` and `game.groundBelow(point)`.
 - `game.playArea`: the box players swim in.
 
 Scripts written for 1.0.0 to 1.2.0 work as they did.

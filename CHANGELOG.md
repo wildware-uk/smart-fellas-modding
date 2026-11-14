@@ -9,7 +9,7 @@ Calls added; scripts written for 1.0.0 to 1.2.0 work as they did. Each needs a g
 
 - Rays through the map: `game.raycast(from, to)` settles with where a straight line first meets the
   map's rock, sand or pieces (a new type, `RayHit`), or null. Players and creatures are let through.
-- Built on it: `game.lineOfSight(a, b)`, `game.groundBelow(point)` and `game.randomGroundPoint()`.
+- Built on it: `game.lineOfSight(a, b)` and `game.groundBelow(point)`.
 - `game.playArea`: the box players swim in (a new type, `PlayArea`).
 - Wiki: a new page, Rays and the ground, with examples.
 

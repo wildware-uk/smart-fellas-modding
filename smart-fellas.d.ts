@@ -533,13 +533,6 @@ interface Game {
   lineOfSight(a: Point, b: Point): Promise<boolean>;
   /** The ground straight under `point`, down to under the play area's floor; or null if there is none. One ray. */
   groundBelow(point: Point): Promise<RayHit | null>;
-  /**
-   * A point on the ground somewhere in the play area, picked with `game.random()`, so the same
-   * seed gives the same spot. It looks straight down from the play area's ceiling at 6 random spots
-   * and gives the first that meets ground in open water, skipping any under solid rock; or null if
-   * none do. Six rays.
-   */
-  randomGroundPoint(): Promise<Point | null>;
 
   /** Shows everyone a message from the map: 1 to 120 characters, a few a second at most. */
   say(text: string): void;
