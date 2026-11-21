@@ -2,6 +2,14 @@
 
 What changed in the Smart Fellas scripting API, its examples and its wiki, newest first.
 
+## 1.10.0
+
+Calls added; scripts written for 1.0.0 to 1.9.0 work as they did. Each needs a game that knows API
+1.10.0.
+
+- Hunt countdown: as each hunt starts, divers now float at the sea's surface for 10 seconds before
+  they may dive. `game.diveCountdown(seconds)` makes it longer or shorter, and 0 turns it off.
+
 ## 1.9.0
 
 Calls added; scripts written for 1.0.0 to 1.8.1 work as they did. Each needs a game that knows API
