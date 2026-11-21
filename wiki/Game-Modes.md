@@ -195,12 +195,16 @@ bots you leave alone stay off it.
 - `game.closeTeam(team, why)` greys out a team's Join button in the lobby; `game.openTeam` opens it.
 - `game.freeForAll(true)`: everyone plays for themselves.
 - `game.loadout("diver", ...tools)`: what divers carry, from `"spear"`, `"net"`, `"sensor"` and `"torch"`.
+- `game.sensorLimit(count, who?)`: how many motion sensors a diver may have out at once, 1 to 8,
+  for every diver or, with `"turned"`, only for divers who were caught as octopuses this round.
 
 ```ts
 // Roles: each round one octopus is secretly picked, and only it is told. Caught octopuses come back
 // as divers after 5 seconds.
 game.onMatchStart(() => {
   game.setFate("octopus", "turn", 5);
+  // A turned diver has one sensor out at a time: placing another moves it.
+  game.sensorLimit(1, "turned");
 });
 
 game.onRoundStart(() => {

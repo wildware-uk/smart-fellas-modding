@@ -2,6 +2,15 @@
 
 What changed in the Smart Fellas scripting API, its examples and its wiki, newest first.
 
+## 1.9.0
+
+Calls added; scripts written for 1.0.0 to 1.8.1 work as they did. Each needs a game that knows API
+1.9.0.
+
+- Motion sensors: `game.sensorLimit(count, who?)` sets how many sensors a diver may have out at
+  once, for every diver or only for turned divers.
+- Wiki: the roles example on Game modes gives turned divers one sensor.
+
 ## 1.8.1
 
 No new calls: examples and the wiki only.

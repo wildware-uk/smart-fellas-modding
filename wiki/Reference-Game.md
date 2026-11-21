@@ -308,6 +308,17 @@ and "torch" (the lamp), each once, with at least one gun. With one gun only, div
 whatever the lobby's Gun setting, and the lobby shows it as set by the mode. What they lack isn't
 on their screen. Until a script calls it, divers carry everything (for game modes).
 
+### sensorLimit
+
+```ts
+sensorLimit(count: number, who?: "divers" | "turned"): void;
+```
+
+How many motion sensors a diver may have out at once: 1 to 8. Placing one more takes away that
+diver's oldest. `who` is "divers" for every diver (if left out), or "turned" for divers who were
+octopuses caught this round (see setFate's "turn"), in place of every diver's number. Until a
+script calls it, every diver may have 3 out (for game modes).
+
 ### closeTeam
 
 ```ts
