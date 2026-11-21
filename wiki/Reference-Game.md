@@ -319,6 +319,17 @@ diver's oldest. `who` is "divers" for every diver (if left out), or "turned" for
 octopuses caught this round (see setFate's "turn"), in place of every diver's number. Until a
 script calls it, every diver may have 3 out (for game modes).
 
+### diveCountdown
+
+```ts
+diveCountdown(seconds: number): void;
+```
+
+How long divers float at the sea's surface as each hunt starts, before they may dive: 0 to 60
+whole seconds. Everyone sees the countdown, and the round's clock starts when it ends. 0 turns
+it off: divers start on their start points, as before 1.10.0. Until a script calls it, the
+countdown runs 10 seconds (for game modes).
+
 ### closeTeam
 
 ```ts
