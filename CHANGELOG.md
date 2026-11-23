@@ -2,6 +2,14 @@
 
 What changed in the Smart Fellas scripting API, its examples and its wiki, newest first.
 
+## 1.11.0
+
+Calls added; scripts written for 1.0.0 to 1.10.0 work as they did. Each needs a game that knows API
+1.11.0.
+
+- Round events: once or twice a hunt something happens to everyone at once, starting with the Tuna
+  Rush. `game.roundEvents(on)` turns them off or on for a mode, whatever the lobby says.
+
 ## 1.10.0
 
 Calls added; scripts written for 1.0.0 to 1.9.0 work as they did. Each needs a game that knows API

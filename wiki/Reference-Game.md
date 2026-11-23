@@ -330,6 +330,18 @@ whole seconds. Everyone sees the countdown, and the round's clock starts when it
 it off: divers start on their start points, as before 1.10.0. Until a script calls it, the
 countdown runs 10 seconds (for game modes).
 
+### roundEvents
+
+```ts
+roundEvents(on: boolean): void;
+```
+
+Whether the hunt has round events: once or twice a hunt something happens to everyone at once,
+such as a Tuna Rush. `false` turns them off, whatever the host chose in the lobby, and `true` turns
+them on. It counts for the events still to come, not one already under way. Until a script calls
+it, the lobby's Round events setting decides, which is on unless the host turns it off (for game
+modes).
+
 ### closeTeam
 
 ```ts
