@@ -2,13 +2,20 @@
 
 What changed in the Smart Fellas scripting API, its examples and its wiki, newest first.
 
+## 1.11.2
+
+Nothing changed for scripts; a fix to 1.11.1's notes.
+
+- Clams don't grow on a rig's steel after all: only mussels and crabs do. A clam spawned near the
+  beams grows on the nearest rock instead.
+
 ## 1.11.1
 
 Nothing removed; scripts written for 1.0.0 to 1.11.0 work as they did.
 
 - Mussels: a new food that grows on the steel of The Oil Rig's beams. `game.onEat` can now say
-  `"mussel"`, and `FoodKind` has it. Scripts can't spawn mussels. Crabs and clams spawned near a
-  rig's beams can grow on its steel.
+  `"mussel"`, and `FoodKind` has it. Scripts can't spawn mussels. Crabs spawned near a rig's beams
+  can grow on its steel.
 
 ## 1.11.0
 

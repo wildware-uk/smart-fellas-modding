@@ -595,8 +595,7 @@ interface Game {
    * Asks the game for a creature or food near a point within 1000 m of the map's middle, and gives
    * back its handle at once. The game puts it where such a thing can be:
    * - food grows on the free food spot nearest the point that suits it, if one is within 10 m
-   *   (crabs on sand, rock or steel, shrimp on sand, clams on rock or steel), and doesn't grow back once
-   *   eaten;
+   *   (crabs on sand, rock or steel, shrimp on sand, clams on rock), and doesn't grow back once eaten;
    * - a shark joins its loop round the map at the point nearest yours;
    * - an eel or a groper goes beside the rock nearest the point;
    * - a lionfish hovers at the point, lifted clear of any rock, and a flounder lies on the seabed
