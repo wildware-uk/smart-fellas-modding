@@ -2,6 +2,14 @@
 
 What changed in the Smart Fellas scripting API, its examples and its wiki, newest first.
 
+## 1.11.1
+
+Nothing removed; scripts written for 1.0.0 to 1.11.0 work as they did.
+
+- Mussels: a new food that grows on the steel of The Oil Rig's beams. `game.onEat` can now say
+  `"mussel"`, and `FoodKind` has it. Scripts can't spawn mussels. Crabs and clams spawned near a
+  rig's beams can grow on its steel.
+
 ## 1.11.0
 
 Calls added; scripts written for 1.0.0 to 1.10.0 work as they did. Each needs a game that knows API
