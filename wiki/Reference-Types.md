@@ -134,7 +134,7 @@ How a player was caught: in a creature's jaws, or in a diver's net.
 ## FoodKind
 
 ```ts
-type FoodKind = "crab" | "clam" | "shrimp" | "wrasse" | "lobster";
+type FoodKind = "crab" | "clam" | "shrimp" | "mussel" | "wrasse" | "lobster";
 ```
 
 Food a player can eat.

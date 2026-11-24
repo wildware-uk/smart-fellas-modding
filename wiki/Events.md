@@ -14,7 +14,7 @@ An event is the game telling your script that something happened. You give it a 
 | `game.onJoin`, `game.onLeave` | a player joins or leaves the match | the player |
 | `game.onRespawn` | a player comes back after being out or waiting | the player |
 | `game.onTeamChange` | a player moves to another team | the player, the old team, the new team |
-| `game.onEat` | a player finishes eating | the player, and the food: `"crab"`, `"clam"`, `"shrimp"`, `"wrasse"` or `"lobster"` |
+| `game.onEat` | a player finishes eating | the player, and the food: `"crab"`, `"clam"`, `"shrimp"`, `"mussel"`, `"wrasse"` or `"lobster"` |
 | `game.onCaught` | a player is caught | the player, who caught them (or `null`), and how: `"jaws"` or `"net"` |
 | `game.onKilled` | a player is killed | the player, and who killed them (or `null`) |
 | `game.onAbility`, `game.onAbilityLand` | a mode's ability is used, or its lunge lands | the user, the ability's id, the target |
